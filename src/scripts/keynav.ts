@@ -131,7 +131,7 @@ function boot(): void {
         break;
       }
       case "?": {
-        if (isModified(event) || !(dialog instanceof HTMLDialogElement)) return;
+        if (!(dialog instanceof HTMLDialogElement)) return;
         event.preventDefault();
         dialog.showModal();
         break;
@@ -141,13 +141,18 @@ function boot(): void {
     }
   });
 
-  // Close button inside the overlay dialog
-  document
-    .querySelector<HTMLButtonElement>("#shortcuts [data-close]")
-    ?.addEventListener("click", () => {
-      const dialog = document.getElementById("shortcuts");
-      if (dialog instanceof HTMLDialogElement) dialog.close();
+  // Close button & backdrop click inside the overlay dialog
+  const shortcutsDialog = document.getElementById("shortcuts");
+  if (shortcutsDialog instanceof HTMLDialogElement) {
+    shortcutsDialog
+      .querySelector<HTMLButtonElement>("[data-close]")
+      ?.addEventListener("click", () => {
+        shortcutsDialog.close();
+      });
+    shortcutsDialog.addEventListener("click", (event) => {
+      if (event.target === shortcutsDialog) shortcutsDialog.close();
     });
+  }
 }
 
 /**

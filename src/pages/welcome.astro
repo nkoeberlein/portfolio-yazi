@@ -16,9 +16,8 @@ if (!self) throw new Error("welcome.txt missing from root view");
 <TUIShell
   title="welcome.txt"
   description={`${SITE.name}, ${SITE.role} — a portfolio that behaves like a terminal file manager.`}
-  crumbs={[{ label: "~", href: "/" }, { label: "welcome.txt" }]}
+  crumbs={[{ label: "~", href: "/welcome/" }, { label: "welcome.txt" }]}
   kind="file"
-  parent="/"
   status={statusOf(entries)}
 >
   <ParentPane entries={homeParent()} label="/home" />

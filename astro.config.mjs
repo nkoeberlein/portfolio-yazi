@@ -8,6 +8,9 @@ import { SITE } from "./src/site.config.ts";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.url,
+  redirects: {
+    "/": "/welcome/",
+  },
   integrations: [
     mermaidGuard(),
     // Legal pages carry noindex — keep them out of the sitemap as well.
