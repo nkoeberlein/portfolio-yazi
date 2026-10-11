@@ -20,6 +20,12 @@ and every page is still a plain, crawlable HTML document.
   is a small progressive enhancement, no UI framework.
 - **Content collections** — projects, blog posts, pictures, legal pages and diagram examples are
   Markdown (or `.mmd`) files with validated frontmatter.
+- **File-type icons** — inline SVG glyphs (Material Icon Theme data) recoloured from the flavor
+  variables, like Yazi's `[filetype]` rules; the selected folder shows its open state.
+- **Blog RSS feed** — every post ships in `~/blog/feed.xml`; the feed file appears in the
+  directory listing itself.
+- **SEO ready** — canonical URLs, Open Graph and Twitter cards on every page, plus a sitemap
+  (legal pages excluded, they render `noindex`).
 - **Images** — a `pictures/` folder with previews, plus optional cover images, optimised through
   `astro:assets`.
 - **Mermaid diagrams at build time** — fenced `mermaid` blocks become inline SVG in the theme
@@ -29,11 +35,13 @@ and every page is still a plain, crawlable HTML document.
   optional stylesheet.
 - **Accessible** — labelled panes, visible focus, `prefers-reduced-motion` and
   `prefers-reduced-transparency` respected, native `<dialog>` for the shortcut overlay.
-- **No cookies, no tracking, self-hosted font** — plus imprint and privacy templates.
+- **No cookies, self-hosted font** — zero external requests by default, optional
+  privacy-friendly SimpleAnalytics toggle, plus imprint and privacy templates.
 
 ## Quick start
 
-Requires Node.js 22.18 or newer (the tests rely on Node's built-in TypeScript support).
+Requires Node.js 26 or newer (`engines` + `engine-strict` enforce this on `npm install`; the
+tests rely on Node's built-in TypeScript support).
 
 ```bash
 git clone https://github.com/nkoeberlein/portfolio-yazi.git my-portfolio
@@ -56,8 +64,10 @@ npm run dev        # http://localhost:4321
 The theme ships with sample content for a fictional engineer, Max Mustermann. Replace it in this
 order:
 
-1. **`src/site.config.ts`** — name, role, location, stack and the `user@host` handle. Feeds the
-   profile on the home screen, the breadcrumb, page titles and the shell prompt.
+1. **`src/site.config.ts`** — `url`, name, role, location, contact channels, stack, optional
+   analytics (`simpleAnalytics: false` by default), and the `user@host` handle. Feeds sitemap,
+   canonical/OG URLs and the RSS feed, the profile on the home screen, the breadcrumb, page
+   titles and the shell prompt.
 2. **`src/lib/tree.ts`** — the entries of the home directory `~/`: which folders and files exist,
    in which order.
 3. **`src/content/`** — your actual content:
@@ -128,14 +138,16 @@ src/
 ## Deploying
 
 `npm run build` produces a plain static site in `dist/` — it runs on any static host. Set
-`site` in `astro.config.mjs` to your domain before you add a sitemap or canonical URLs.
+`url` in `src/site.config.ts` to your domain: it drives the sitemap, canonical URLs, Open Graph
+tags and the RSS feed. Add your own `public/og.png` (1200 × 630) for social link previews.
 
 ## Credits
 
 - Interaction model and layout: [Yazi](https://github.com/sxyazi/yazi) by sxyazi.
 - Colour palette: inspired by the [Sweet](https://github.com/EliverLara/Sweet) theme as used in
   Garuda Linux Dr460nized. This project is not affiliated with Yazi, Sweet, Garuda Linux or Astro.
-- Font: [JetBrains Mono](https://www.jetbrains.com/lp/mono/), SIL Open Font License 1.1.
+- Font: [JetBrains Mono](https://www.jetbrains.com/lp/mono/), SIL Open Font License 1.1
+  (`public/fonts/OFL.txt`).
 - Diagrams: [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid).
 
 ## License

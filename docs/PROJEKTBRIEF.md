@@ -70,4 +70,8 @@
   mit sechs `.mmd`-Dateien. Offen für die Einreichung: englische README für Theme-Nutzer,
   Lizenz, Screenshots, restliche fest verdrahtete `max@mustermann`-Angaben nach `site.config.ts`.
 - 2026-10-11: Lizenz **MIT** (`LICENSE`), englische README mit Screenshots, Handle zentral in
-  `site.config.ts` (`HANDLE`). Noch offen: `OFL.txt` zu den Schriftdateien legen.
+  `site.config.ts` (`HANDLE`). `OFL.txt` liegt bei den Schriftdateien (`public/fonts/`).
+- 2026-10-11: Dateityp-/Ordner-Icons als Inline-SVG (material-icon-theme, flavor-eingefärbt,
+  selektierte Ordner zeigen den offenen Zustand), RSS-Feed `/blog/feed.xml` als Eintrag in
+  `~/blog/`, SEO (`url` in `site.config.ts`, canonical/OG/Twitter, Sitemap ohne `/legal/`,
+  `og.png`), README-Screenshots aktualisiert.
