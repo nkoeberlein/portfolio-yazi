@@ -1,14 +1,21 @@
 # portfolio-yazi
 
+[![Built with Astro 7](https://img.shields.io/badge/Astro-7-bc52ee?logo=astro&logoColor=white)](https://astro.build)
+[![Requires Node.js 26+](https://img.shields.io/badge/node-%3E%3D26-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+
 A portfolio theme for [Astro](https://astro.build) that looks and behaves like the terminal file
 manager [Yazi](https://github.com/sxyazi/yazi): three panes, a status line, keyboard navigation —
 and every page is still a plain, crawlable HTML document.
 
-![Home screen: file list in the middle, an ASCII Astro logo with a fetch-style profile on the right](docs/screenshots/home.png)
+Free and open source (MIT). Static output, no client-side framework, no external requests by
+default.
+
+![Home screen: file list in the middle, an ASCII Astro logo with a fetch-style profile on the right](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/home.png)
 
 | Project page with cover image and diagram | Mermaid examples rendered at build time |
 | --- | --- |
-| ![Project page](docs/screenshots/project.png) | ![Diagrams folder](docs/screenshots/diagrams.png) |
+| ![Project page](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/project.png) | ![Diagrams folder](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/diagrams.png) |
 
 ## Features
 
@@ -40,8 +47,9 @@ and every page is still a plain, crawlable HTML document.
 
 ## Quick start
 
-Requires Node.js 26 or newer (`engines` + `engine-strict` enforce this on `npm install`; the
-tests rely on Node's built-in TypeScript support).
+Requires **Astro 7** and **Node.js 26 or newer** (`engines` + `engine-strict` enforce this on
+`npm install`; the tests rely on Node's built-in TypeScript support). All dependencies are public
+npm packages — no private registries, no build-time secrets.
 
 ```bash
 git clone https://github.com/nkoeberlein/portfolio-yazi.git my-portfolio
@@ -153,6 +161,7 @@ tags and the RSS feed. Add your own `public/og.png` (1200 × 630) for social lin
 ## License
 
 [MIT](LICENSE) © 2026 Nikolaus Köberlein. Code and sample content are yours to use and change.
+Questions or problems? [Open an issue](https://github.com/nkoeberlein/portfolio-yazi/issues).
 
 Not covered by that license: the JetBrains Mono font files (SIL Open Font License 1.1) and the
 Astro logo, which is a trademark of its owner and appears here only to say "built with Astro".
