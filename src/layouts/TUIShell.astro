@@ -9,7 +9,7 @@ import "../styles/mermaid.css";
 import "../styles/fx.css";
 import ShortcutOverlay from "../components/ShortcutOverlay.astro";
 import type { Status } from "../lib/panes";
-import { HANDLE } from "../site.config";
+import { HANDLE, SITE } from "../site.config";
 
 export interface Crumb {
   label: string;
@@ -17,20 +17,18 @@ export interface Crumb {
 }
 
 interface Props {
-  /** Seitenteil des Titels (z. B. `cv.md`); der Handle wird angehängt */
+  /** Page part of the title (e.g. `cv.md`); the handle is appended automatically */
   title: string;
   description: string;
-  /** Pfad ab `~`; der Handle-Crumb davor kommt aus der Shell */
+  /** Path relative to `~`; the handle crumb is injected by the shell */
   crumbs: Crumb[];
-  /** "tree" = Listings mit Auswahl, "file" = geöffnete Datei */
+  /** "tree" = listing with interactive selection, "file" = opened document */
   kind: "tree" | "file";
-  /** Route des übergeordneten Verzeichnisses (für die Taste `h`) */
+  /** Route of the parent directory (for the `h` key) */
   parent?: string;
-  /** Bei leerem Hash vorselektierter Eintrag (nur kind="tree") */
-  defaultSel?: string;
-  /** Statuszeile des markierten Eintrags, siehe `statusOf()` */
+  /** Status line content for the active entry, see `statusOf()` */
   status: Status;
-  /** Seite aus Suchmaschinen heraushalten (legal/*) */
+  /** Keep page out of search engines (e.g. legal pages) */
   noindex?: boolean;
 }
 
@@ -40,13 +38,17 @@ const {
   crumbs,
   kind,
   parent = "",
-  defaultSel = "",
   status,
   noindex = false,
 } = Astro.props;
 
-// Ordner-Labels enden bereits auf `/` — dort kein zusätzlicher Trenner.
+// Directory labels already end with `/` — do not add an extra separator there.
 const SEP = '<span aria-hidden="true">/</span>';
+const pageTitle = `${title} · ${HANDLE}`;
+// SITE.url feeds astro.config `site`; fall back to the request origin in dev.
+const base = Astro.site ?? Astro.url;
+const canonicalURL = new URL(Astro.url.pathname, base);
+const ogImageURL = new URL("/og.png", base);
 const path: Crumb[] = [{ label: HANDLE, href: "/" }, ...crumbs];
 const crumb = path
   .map((c, i) => {
@@ -70,15 +72,29 @@ const crumb = path
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title={`~/blog — ${SITE.name}`} href="/blog/feed.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={HANDLE} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{`${title} · ${HANDLE}`}</title>
+    <title>{pageTitle}</title>
+    {SITE.simpleAnalytics && (
+      <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    )}
   </head>
   <body>
     <div
       class="tui"
       data-kind={kind}
       data-parent={parent}
-      data-default={defaultSel}
       data-home="/"
     >
       <header class="tui-head">

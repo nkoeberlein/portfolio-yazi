@@ -1,8 +1,8 @@
 /**
- * Baut EntryVMs aus den Content Collections — für Ordner-Listings und für
- * die Geschwisterlisten auf File-Seiten (ein Shared Builder pro Collection).
- * Die geöffnete Datei (`opened`) bekommt kein Preview-Template: ihr Dokument
- * steht bereits im Preview-Pane, keynav.ts stellt es bei Rückkehr wieder her.
+ * Builds EntryVMs from Content Collections — for directory listings and for
+ * sibling lists on file pages (one shared builder per collection).
+ * The opened file (`opened`) does not receive a preview template: its document
+ * already occupies the preview pane, and keynav.ts restores it upon return.
  */
 import type { CollectionEntry } from "astro:content";
 import type { EntryVM } from "../components/FileList.astro";
@@ -17,7 +17,7 @@ export function truncateNote(text: string): string {
   return clean.length > SHORT ? `${clean.slice(0, SHORT - 1).trimEnd()}…` : clean;
 }
 
-/** featured zuerst, danach neueste zuerst */
+/** Featured entries first, then newest first. */
 const projectOrder = (a: CollectionEntry<"projects">, b: CollectionEntry<"projects">): number =>
   Number(b.data.featured) - Number(a.data.featured) ||
   b.data.updated.getTime() - a.data.updated.getTime();
@@ -49,7 +49,9 @@ async function projectVM(entry: ProjectEntry, selected: boolean, opened = false)
               ["stack:", d.stack.join(", ")],
             ]),
             p(d.summary),
-            d.repo ? `<p class="pv-p">↳ <a href="${d.repo}">github — ${esc(entry.id)}</a></p>` : "",
+            d.repo
+              ? `<p class="pv-p">↳ <a href="${esc(d.repo)}">github — ${esc(entry.id)}</a></p>`
+              : "",
             keyHint([["⏎", "open the file"]]),
           ].join(""),
   };
@@ -98,12 +100,30 @@ export async function postVMs(
 ): Promise<EntryVM[]> {
   const sorted = [...posts].sort(postOrder);
   const target = selectedId ?? sorted[0]?.id;
-  return Promise.all(sorted.map((entry) => postVM(entry, entry.id === target, opened)));
+  const vms = await Promise.all(sorted.map((entry) => postVM(entry, entry.id === target, opened)));
+  // The RSS feed is itself an entry of the blog directory.
+  vms.push({
+    name: "feed.xml",
+    kind: "file",
+    href: "/blog/feed.xml",
+    note: "subscribe via RSS",
+    size: "—",
+    date: "",
+    selected: false,
+    previewTitle: "preview — feed.xml",
+    previewHTML: [
+      heading("RSS feed"),
+      kv([["url:", "/blog/feed.xml"]]),
+      p("Every post in this directory, as an RSS 2.0 feed — point your reader at this file."),
+      keyHint([["⏎", "open the feed"]]),
+    ].join(""),
+  });
+  return vms;
 }
 
 type LegalEntry = CollectionEntry<"legal">;
 
-/** alphabetisch: imprint vor privacy */
+/** Alphabetical order: imprint before privacy. */
 export function legalVMs(legal: LegalEntry[], selectedId?: string, opened = false): EntryVM[] {
   const sorted = [...legal].sort((a, b) => a.id.localeCompare(b.id));
   const target = selectedId ?? sorted[0]?.id;
