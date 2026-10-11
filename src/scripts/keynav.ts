@@ -1,14 +1,14 @@
 /**
- * Tastatursteuerung — reiner Aufsatz auf normale Links (Progressive
- * Enhancement). Ohne JS bleibt die Site vollständig navigierbar.
+ * Keyboard navigation — layered directly on top of native links (progressive
+ * enhancement). Without JS, the site remains fully navigable.
  *
- *   ↑/↓, j/k  Auswahl bewegen (Preview + Statuszeile folgen)
- *   J/K       Preview-Pane scrollen (auch PageDown/PageUp/Leertaste)
- *   g / G     erster / letzter Eintrag (auch Home/End)
- *   →, ⏎, l   Auswahl öffnen (echte Navigation)
- *   ←, h      ins übergeordnete Verzeichnis
- *   q         zurück nach ~
- *   ?         Shortcut-Overlay
+ *   ↑/↓, j/k  Move selection (preview + status bar update)
+ *   J/K       Scroll preview pane (also PageDown/PageUp/Space)
+ *   g / G     First / last entry (also Home/End)
+ *   →, ⏎, l   Open selection (real navigation)
+ *   ←, h      Go to parent directory
+ *   q         Back to ~
+ *   ?         Shortcut overlay
  */
 type Kind = "tree" | "file";
 
@@ -18,12 +18,12 @@ interface Ctx {
   home: string;
   items: HTMLLIElement[];
   current: number;
-  /** Serverseitig gerenderte Preview — auf File-Seiten das geöffnete Dokument,
-   * das beim Zurückkehren zum eigenen Eintrag wiederhergestellt wird. */
+  /** Server-rendered preview — on file pages this holds the opened document,
+   * which is restored when returning to its own entry. */
   original: { title: string; nodes: Node[] };
 }
 
-/** Zeilenhöhe × 5 — so weit „seekt" Yazi die Preview pro J/K. */
+/** Line height × 5 — scroll delta per J/K like Yazi. */
 const SEEK_PX = 120;
 
 function boot(): void {
@@ -50,10 +50,10 @@ function boot(): void {
     },
   };
 
-  // Hash (#sel=name) schlägt die serverseitige Vorauswahl — deep-linkbar.
-  const hashName = decodeURIComponent(window.location.hash.replace(/^#sel=/, ""));
+  // Fragment (#sel=name) overrides server-side preselection — enables deep-linking.
+  const hashName = parseHashSelection(window.location.hash);
   const hashIndex = items.findIndex((item) => item.dataset.name === hashName);
-  if (hasHash(hashName) && hashIndex >= 0) select(ctx, hashIndex, false);
+  if (hashName && hashIndex >= 0) select(ctx, hashIndex, false);
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -66,7 +66,7 @@ function boot(): void {
         event.preventDefault();
         dialog.close();
       }
-      return; // Esc schließt das Dialog nativ.
+      return; // Escape closes the dialog natively.
     }
 
     switch (event.key) {
@@ -92,7 +92,7 @@ function boot(): void {
       case " ":
       case "PageDown":
       case "PageUp": {
-        // Nur abfangen, wenn der Pane selbst scrollt — sonst scrollt die Seite (Mobile).
+        // Only intercept if the pane scrolls itself — otherwise let the window scroll (mobile).
         const page = previewBody.clientHeight * (event.key === "PageUp" ? -0.9 : 0.9);
         if (event.shiftKey || !scrollPreview(page, reducedMotion)) return;
         event.preventDefault();
@@ -114,8 +114,8 @@ function boot(): void {
       case "Enter":
       case "l": {
         if (isModified(event)) return;
-        // Enter auf einem fokussierten Link/Button außerhalb der Liste gehört dem Browser.
-        if (event.key === "Enter" && isForeignControl(event.target)) return;
+        // Enter / activation on a focused link or button outside the list belongs to the browser.
+        if (isForeignControl(event.target)) return;
         openCurrent(ctx);
         break;
       }
@@ -141,7 +141,7 @@ function boot(): void {
     }
   });
 
-  // Schließen-Button im Overlay
+  // Close button inside the overlay dialog
   document
     .querySelector<HTMLButtonElement>("#shortcuts [data-close]")
     ?.addEventListener("click", () => {
@@ -150,8 +150,17 @@ function boot(): void {
     });
 }
 
-function hasHash(name: string): boolean {
-  return /^#sel=/.test(window.location.hash) && name.length > 0;
+/**
+ * Extracts entry name from a URL fragment (`#sel=<name>`).
+ * Ignores other fragments and catches malformed percent-encoding.
+ */
+export function parseHashSelection(rawHash: string): string {
+  if (!/^#sel=/.test(rawHash)) return "";
+  try {
+    return decodeURIComponent(rawHash.slice("#sel=".length));
+  } catch {
+    return "";
+  }
 }
 
 function isForeignControl(target: EventTarget | null): boolean {
@@ -187,8 +196,8 @@ function select(ctx: Ctx, next: number, scroll: boolean, reducedMotion = true): 
   targetLink.setAttribute("aria-current", "page");
   ctx.current = next;
 
-  // Preview aus dem <template> des Eintrags klonen (kein Netzwerk-Request).
-  // Ohne Template ist es die geöffnete Datei: ihr Dokument zurückholen.
+  // Clone preview from the entry's <template> (no network request).
+  // Without a template, this is the opened file: restore original document.
   const tpl = target.querySelector<HTMLTemplateElement>("template");
   if (tpl) {
     previewSwap(tpl.dataset.title ?? "", [tpl.content.cloneNode(true)]);
@@ -200,7 +209,7 @@ function select(ctx: Ctx, next: number, scroll: boolean, reducedMotion = true): 
     targetLink.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
   }
 
-  // Hash ohne Navigationseintrag synchron halten — refreshed deep-linkt.
+  // Keep fragment in sync without creating a history entry — refresh stays deep-linked.
   const hash = `#sel=${encodeURIComponent(target.dataset.name ?? "")}`;
   window.history.replaceState(null, "", hash);
 }
@@ -214,7 +223,7 @@ function previewSwap(title: string, nodes: Node[]): void {
   previewBody.scrollTop = 0;
 }
 
-/** Statuszeile auf den markierten Eintrag setzen (data-Attribute aus FileList). */
+/** Update status line for the highlighted entry (data attributes from FileList). */
 function syncStatus(item: HTMLLIElement, index: number, total: number): void {
   const values: Record<string, string> = {
     "st-name": item.dataset.name ?? "",
@@ -230,7 +239,7 @@ function syncStatus(item: HTMLLIElement, index: number, total: number): void {
   }
 }
 
-/** Scrollt den Preview-Pane; `false`, wenn er nicht selbst scrollt (Single-Pane). */
+/** Scroll the preview pane; returns `false` if the pane cannot scroll itself (single-pane view). */
 function scrollPreview(delta: number, reducedMotion: boolean): boolean {
   const body = document.getElementById("preview-body");
   if (!body || body.scrollHeight <= body.clientHeight) return false;
@@ -242,14 +251,14 @@ function openCurrent(ctx: Ctx): void {
   const link = ctx.items[ctx.current]?.querySelector<HTMLAnchorElement>("a.entry");
   const href = link?.getAttribute("href");
   if (!href) return;
-  if (href === window.location.pathname) return; // geöffnete Datei: nichts tun
+  if (href === window.location.pathname) return; // Already on opened file: no-op
   window.location.href = href;
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", boot, { once: true });
-} else {
-  boot();
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
 }
-
-export {};
