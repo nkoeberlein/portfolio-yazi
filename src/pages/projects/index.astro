@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { projectVMs } from "../../lib/listing";
+import { rootParent, statusOf } from "../../lib/panes";
+
+const projects = await getCollection("projects");
+const entries = await projectVMs(projects);
+
+const first = entries.find((entry) => entry.selected);
+if (!first) throw new Error("Projects directory needs at least one entry");
+---
+
+<TUIShell
+  title="~/projects/"
+  description="Selected projects by Max Mustermann: distributed systems, platform tooling, open source."
+  crumbs={[{ label: "~", href: "/" }, { label: "projects/" }]}
+  kind="tree"
+  defaultSel={first.name}
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/projects/")} label="~" />
+  <FileList entries={entries} ariaLabel="Projects directory" />
+  <PreviewPane title={first.previewTitle} html={first.previewHTML} />
+</TUIShell>

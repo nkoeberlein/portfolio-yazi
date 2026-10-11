@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { diagramVMs } from "../../lib/diagrams";
+import { rootParent, statusOf } from "../../lib/panes";
+
+const diagrams = await getCollection("diagrams");
+const entries = diagramVMs(diagrams);
+
+const first = entries.find((entry) => entry.selected);
+if (!first) throw new Error("Diagrams directory needs at least one entry");
+---
+
+<TUIShell
+  title="~/diagrams/"
+  description="Mermaid diagram examples, rendered to SVG at build time: flowchart, sequence, class, ER, state and XY chart."
+  crumbs={[{ label: "~", href: "/" }, { label: "diagrams/" }]}
+  kind="tree"
+  defaultSel={first.name}
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/diagrams/")} label="~" />
+  <FileList entries={entries} ariaLabel="Diagrams directory" />
+  <PreviewPane title={first.previewTitle} html={first.previewHTML} />
+</TUIShell>

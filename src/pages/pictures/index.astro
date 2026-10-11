@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { rootParent, statusOf } from "../../lib/panes";
+import { pictureVMs } from "../../lib/pictures";
+
+const pictures = await getCollection("pictures");
+const entries = await pictureVMs(pictures);
+
+const first = entries.find((entry) => entry.selected);
+if (!first) throw new Error("Pictures directory needs at least one entry");
+---
+
+<TUIShell
+  title="~/pictures/"
+  description="Pictures and doodles by Max Mustermann."
+  crumbs={[{ label: "~", href: "/" }, { label: "pictures/" }]}
+  kind="tree"
+  defaultSel={first.name}
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/pictures/")} label="~" />
+  <FileList entries={entries} ariaLabel="Pictures directory" />
+  <PreviewPane title={first.previewTitle} html={first.previewHTML} />
+</TUIShell>

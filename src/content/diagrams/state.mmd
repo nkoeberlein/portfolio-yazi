@@ -1,0 +1,13 @@
+%% title: State diagram
+%% summary: Lifecycles and transitions — a deployment from queued to done.
+%% updated: 2026-10-07
+stateDiagram-v2
+  [*] --> Queued
+  Queued --> Building: runner free
+  Building --> Canary: image pushed
+  Building --> Failed: tests red
+  Canary --> Live: SLO holds
+  Canary --> RolledBack: SLO breached
+  Failed --> Queued: retry
+  Live --> [*]
+  RolledBack --> [*]

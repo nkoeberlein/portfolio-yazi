@@ -1,0 +1,39 @@
+---
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+
+const requested = Astro.url.pathname;
+const missing = requested.slice(1) || "?";
+---
+
+<TUIShell
+  title="no such file"
+  description="404 — the path does not exist in this tree."
+  crumbs={[{ label: "~", href: "/" }, { label: requested.slice(1) || "?" }]}
+  kind="file"
+  parent="/"
+  status={{
+    name: missing,
+    note: "no such file or directory",
+    size: "404",
+    date: "",
+    perms: "----------",
+    pos: "0/0",
+  }}
+>
+  <aside class="pane pane-full" aria-label="Error">
+    <span class="pane-title" aria-hidden="true"> zsh </span>
+    <div class="pane-body">
+    <Prompt cmd={`cat ${requested.slice(1) || requested}`} />
+    <div class="doc">
+      <p><strong>zsh: no such file or directory:</strong> {requested || "?"}</p>
+      <p>The requested path does not exist in this tree. Nothing was harmed — the parent directory still holds your files.</p>
+      <ul>
+        <li><a href="/">cd ~</a> — the home directory</li>
+        <li><a href="/projects/">cd projects/</a></li>
+        <li><a href="/blog/">cd blog/</a></li>
+      </ul>
+    </div>
+    </div>
+  </aside>
+</TUIShell>

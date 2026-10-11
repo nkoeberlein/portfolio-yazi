@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import Prompt from "../../components/Prompt.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { projectVMs } from "../../lib/listing";
+import { rootParent, statusOf } from "../../lib/panes";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry, projects } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+  projects: CollectionEntry<"projects">[];
+}
+
+const { entry, projects } = Astro.props;
+const { Content } = await render(entry);
+const entries = await projectVMs(projects, entry.id, true);
+const self = entries.find((vm) => vm.selected);
+if (!self) throw new Error(`Self entry missing for ${entry.id}`);
+---
+
+<TUIShell
+  title={self.name}
+  description={entry.data.summary}
+  crumbs={[
+    { label: "~", href: "/" },
+    { label: "projects/", href: "/projects/" },
+    { label: self.name },
+  ]}
+  kind="file"
+  parent="/projects/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/projects/")} label="~" />
+  <FileList entries={entries} ariaLabel="Projects directory" />
+  <PreviewPane title={self.previewTitle}>
+    <Prompt cmd={`cat ${self.name}`} />
+    {
+      entry.data.cover && (
+        <Image
+          class="doc-cover"
+          src={entry.data.cover}
+          alt={entry.data.coverAlt}
+          widths={[640, 1200]}
+          sizes="(min-width: 64rem) 60vw, 100vw"
+          loading="eager"
+        />
+      )
+    }
+    <article class="doc"><Content /></article>
+  </PreviewPane>
+</TUIShell>

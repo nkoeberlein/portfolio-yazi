@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { rootParent, statusOf } from "../../lib/panes";
+import { pictureVMs } from "../../lib/pictures";
+
+export async function getStaticPaths() {
+  const pictures = await getCollection("pictures");
+  return pictures.map((entry) => ({ params: { slug: entry.id }, props: { entry, pictures } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"pictures">;
+  pictures: CollectionEntry<"pictures">[];
+}
+
+const { entry, pictures } = Astro.props;
+const { Content } = await render(entry);
+const entries = await pictureVMs(pictures, entry.id, true);
+const self = entries.find((vm) => vm.selected);
+if (!self) throw new Error(`Self entry missing for ${entry.id}`);
+---
+
+<TUIShell
+  title={self.name}
+  description={entry.data.caption}
+  crumbs={[
+    { label: "~", href: "/" },
+    { label: "pictures/", href: "/pictures/" },
+    { label: self.name },
+  ]}
+  kind="file"
+  parent="/pictures/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/pictures/")} label="~" />
+  <FileList entries={entries} ariaLabel="Pictures directory" />
+  <PreviewPane title={self.previewTitle}>
+    <figure class="doc-figure">
+      <Image
+        src={entry.data.image}
+        alt={entry.data.alt}
+        widths={[800, 1600]}
+        sizes="(min-width: 64rem) 60vw, 100vw"
+        loading="eager"
+      />
+      <figcaption>{entry.data.caption}</figcaption>
+    </figure>
+    <article class="doc">
+      <h1>{entry.data.title}</h1>
+      <p class="pv-kv">{self.date} · {self.size}</p>
+      <Content />
+    </article>
+  </PreviewPane>
+</TUIShell>

@@ -1,0 +1,20 @@
+%% title: Class diagram
+%% summary: Types and their relations — the entry model behind this file manager.
+%% updated: 2026-10-09
+classDiagram
+  class Entry {
+    +string name
+    +string href
+    +string note
+  }
+  class Directory {
+    +Entry[] children
+    +list()
+  }
+  class File {
+    +string size
+    +preview()
+  }
+  Entry <|-- Directory
+  Entry <|-- File
+  Directory o-- Entry

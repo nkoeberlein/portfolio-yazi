@@ -1,0 +1,53 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const { entries } = await rootVMs("/contact/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("contact.md missing from root view");
+---
+
+<TUIShell
+  title="contact.md"
+  description="Contact channels for Max Mustermann: email, GitHub — replies within 24h."
+  crumbs={[{ label: "~", href: "/" }, { label: "contact.md" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — contact.md">
+    <Prompt cmd="cat contact.md" />
+    <article class="doc">
+      <h1>contact.md — reach me</h1>
+
+      <table>
+        <tr><th style="width: 10ch">channel</th><th>address</th></tr>
+        <tr><td>email</td><td><strong>max@mustermann.example</strong> — work &amp; offers</td></tr>
+        <tr><td>github</td><td><strong>github.com/mustermann</strong> — code, issues, PRs</td></tr>
+        <tr><td>linkedin</td><td>in/mustermann — the least interesting channel</td></tr>
+        <tr><td>matrix</td><td>@maxm:matrix.example</td></tr>
+      </table>
+
+      <h2>etiquette</h2>
+      <ul>
+        <li>I reply to everything within <strong>24h</strong>, Europe/Berlin time</li>
+        <li>recruiting: <a href="/cv/">cv.md</a> first, then email — mentioning a specific project earns bonus</li>
+        <li>consulting / code reviews: I keep a small monthly slot; email with scope and timeline</li>
+      </ul>
+
+      <h2>availability</h2>
+      <p>
+        Senior / staff engineering roles in <strong>Berlin or remote (UTC±3)</strong>, platform,
+        infrastructure or reliability teams. Currently
+        <strong>open to conversations</strong> for 2027 onboarding.
+      </p>
+    </article>
+  </PreviewPane>
+</TUIShell>

@@ -1,0 +1,60 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const { entries } = await rootVMs("/about/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("about.md missing from root view");
+---
+
+<TUIShell
+  title="about.md"
+  description="Max Mustermann — senior software engineer in Berlin: distributed systems, platform work, observability."
+  crumbs={[{ label: "~", href: "/" }, { label: "about.md" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — about.md">
+    <Prompt cmd="cat about.md" />
+    <article class="doc">
+      <h1>max mustermann</h1>
+      <p>
+        Senior software engineer in <strong>Berlin</strong>. Ten years of making distributed
+        systems <em>boring</em> — which in this business is the polite word for reliable.
+        I build the paved roads other engineers travel on, and I delete more work than I create.
+      </p>
+
+      <h2>what I do</h2>
+      <ul>
+        <li><strong>Platform &amp; infrastructure</strong> — release automation, golden paths, tooling that pays rent by deleting tickets</li>
+        <li><strong>Reliability &amp; observability</strong> — p99 budgets instead of average dashboards, error budgets that people actually read</li>
+        <li><strong>Distributed systems</strong> — Go for the fleet, Rust at the border, TypeScript for the humans</li>
+      </ul>
+
+      <h2>how I work</h2>
+      <p>
+        Merge discipline over review theatre. Written context over meeting archaeology.
+        I optimise for the team that stays after I leave: boring architecture, honest
+        runbooks, and deletion lists instead of trophy projects.
+      </p>
+
+      <h2>this site</h2>
+      <p>
+        The whole portfolio is styled after <a href="https://github.com/sxyazi/yazi">yazi</a>,
+        the terminal file manager — because a portfolio should behave like its owner's
+        habitat. No JS framework, no cookies, just static HTML.
+        Keyboard-first: <strong>j/k</strong> moves, <strong>Enter</strong> opens, <strong>?</strong> shows every shortcut.
+      </p>
+
+      <p><strong>↳ next:</strong> <a href="/cv/">cv.md</a> for the timeline, <a href="/projects/">projects/</a> for the work.</p>
+    </article>
+  </PreviewPane>
+</TUIShell>

@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { postVMs } from "../../lib/listing";
+import { rootParent, statusOf } from "../../lib/panes";
+
+const posts = await getCollection("blog");
+const entries = await postVMs(posts);
+
+const first = entries.find((entry) => entry.selected);
+if (!first) throw new Error("Blog directory needs at least one entry");
+---
+
+<TUIShell
+  title="~/blog/"
+  description="Articles & notes by Max Mustermann on platform engineering, performance and engineering culture."
+  crumbs={[{ label: "~", href: "/" }, { label: "blog/" }]}
+  kind="tree"
+  defaultSel={first.name}
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={rootParent("/blog/")} label="~" />
+  <FileList entries={entries} ariaLabel="Blog directory" />
+  <PreviewPane title={first.previewTitle} html={first.previewHTML} />
+</TUIShell>

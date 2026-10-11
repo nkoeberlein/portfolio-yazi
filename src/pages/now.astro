@@ -1,0 +1,69 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const { entries } = await rootVMs("/now/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("now.md missing from root view");
+---
+
+<TUIShell
+  title="now.md"
+  description="What Max Mustermann is working on, learning and reading right now."
+  crumbs={[{ label: "~", href: "/" }, { label: "now.md" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — now.md">
+    <Prompt cmd="cat now.md" />
+    <article class="doc">
+      <h1>what I'm doing now</h1>
+      <p>
+        <em>Last updated <time datetime={self.date}>{self.date}</time>, from Berlin.</em>
+      </p>
+      <p>
+        This is a <a href="https://nownownow.com/about">now page</a>: what has my attention this
+        season, as opposed to everything I have ever done.
+      </p>
+
+      <h2>working on</h2>
+      <ul>
+        <li>
+          <strong>loadsmith 2.0</strong> — replaying captures straight from object storage, so a
+          rehearsal no longer needs the recording cluster to stay up
+          (<a href="/projects/loadsmith/">loadsmith.md</a>).
+        </li>
+        <li>Moving the last two teams at work onto the paved-road deploy pipeline.</li>
+        <li>This site — a portfolio that behaves like a terminal file manager.</li>
+      </ul>
+
+      <h2>learning</h2>
+      <ul>
+        <li>eBPF for request tracing without touching application code.</li>
+        <li>Enough typography to stop fighting monospace grids.</li>
+      </ul>
+
+      <h2>reading</h2>
+      <ul>
+        <li><em>Designing Data-Intensive Applications</em> — second pass, slower this time.</li>
+        <li><em>The Art of Doing Science and Engineering</em> — Richard Hamming.</li>
+      </ul>
+
+      <h2>not doing</h2>
+      <ul>
+        <li>Conference talks until spring.</li>
+        <li>New side projects. The list in <a href="/projects/">projects/</a> is long enough.</li>
+      </ul>
+
+      <p><strong>↳ elsewhere:</strong> <a href="/about/">about.md</a> for the long version, <a href="/contact/">contact.md</a> to say hi.</p>
+    </article>
+  </PreviewPane>
+</TUIShell>

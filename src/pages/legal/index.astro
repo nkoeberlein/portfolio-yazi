@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import FileList from "../../components/FileList.astro";
+import ParentPane from "../../components/ParentPane.astro";
+import PreviewPane from "../../components/PreviewPane.astro";
+import TUIShell from "../../layouts/TUIShell.astro";
+import { legalVMs } from "../../lib/listing";
+import { rootParent, statusOf } from "../../lib/panes";
+
+const legal = await getCollection("legal");
+const entries = legalVMs(legal);
+
+const first = entries.find((entry) => entry.selected);
+if (!first) throw new Error("Legal directory needs at least one entry");
+---
+
+<TUIShell
+  title="~/legal/"
+  description="Imprint and privacy policy of this site."
+  crumbs={[{ label: "~", href: "/" }, { label: "legal/" }]}
+  kind="tree"
+  defaultSel={first.name}
+  parent="/"
+  status={statusOf(entries)}
+  noindex
+>
+  <ParentPane entries={rootParent("/legal/")} label="~" />
+  <FileList entries={entries} ariaLabel="Legal directory" />
+  <PreviewPane title={first.previewTitle} html={first.previewHTML} />
+</TUIShell>

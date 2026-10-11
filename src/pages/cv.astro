@@ -1,0 +1,90 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const { entries } = await rootVMs("/cv/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("cv.md missing from root view");
+---
+
+<TUIShell
+  title="cv.md"
+  description="CV of Max Mustermann, senior software engineer: platform, distributed systems, Go & Rust, Berlin."
+  crumbs={[{ label: "~", href: "/" }, { label: "cv.md" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — cv.md">
+    <Prompt cmd="cat cv.md" />
+    <article class="doc">
+      <h1>cv.md — max mustermann</h1>
+
+      <h2>experience</h2>
+      <table>
+        <tr><th style="width: 12ch">period</th><th>role</th></tr>
+        <tr>
+          <td>2022 → now</td>
+          <td><strong>Senior Software Engineer</strong> — Nordwind Systems, Berlin</td>
+        </tr>
+        <tr><td aria-hidden="true"></td><td>
+          Platform team of 6 for an org of ~300 engineers. Release automation,
+          paved-road infrastructure, observability. Change-failure rate 12% → 1.8%,
+          lead time 45 min → 3 min. Maintainer of <a href="/projects/loadsmith/">loadsmith.md</a> and
+          <a href="/projects/k8s-janitor/">k8s-janitor.md</a>.
+        </td></tr>
+        <tr>
+          <td>2019 → 2022</td>
+          <td><strong>Senior Software Engineer</strong> — Feldpfad GmbH, Berlin</td>
+        </tr>
+        <tr><td aria-hidden="true"></td><td>
+          Led the release-platform work (<a href="/projects/deploybar/">deploybar.md</a>) and built
+          the Postgres observability stack (<a href="/projects/pg-tail/">pg-tail.md</a>).
+          Tech lead of the feature-flag platform used by ~180 engineers.
+        </td></tr>
+        <tr>
+          <td>2018 → 2019</td>
+          <td><strong>Software Engineer</strong> — Feldpfad GmbH, Berlin</td>
+        </tr>
+        <tr><td aria-hidden="true"></td><td>
+          Payments integration, idempotency at scale, the first Kubernetes
+          migration (and its incident review, which was formative).
+        </td></tr>
+        <tr>
+          <td>2016 → 2018</td>
+          <td><strong>Junior Software Engineer</strong> — Kanal&amp;Co, Hamburg</td>
+        </tr>
+        <tr><td aria-hidden="true"></td><td>
+          Rails monolith → service extraction. Learned the value of boring
+          interfaces the hard way.
+        </td></tr>
+      </table>
+
+      <h2>education</h2>
+      <ul>
+        <li>MSc Computer Science — Technische Universität München, 2016</li>
+        <li>BSc Computer Science — Hochschule Kiel, 2014</li>
+      </ul>
+
+      <h2>selected speaking &amp; teaching</h2>
+      <ul>
+        <li>“Taming the tail” — internal conference, 2025</li>
+        <li>Guest lecture: Queueing arithmetic for engineers — TU Berlin, 2024</li>
+      </ul>
+
+      <h2>open source</h2>
+      <p>
+        Maintainer of everything in
+        <a href="/">~/projects/</a>. Occasional patches to
+        kube-rs and ratatui. <a href="/projects/mono-tui/">mono-tui.md</a> is my public design notebook.
+      </p>
+    </article>
+  </PreviewPane>
+</TUIShell>

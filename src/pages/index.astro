@@ -1,70 +1,27 @@
 ---
-// PORTFOLIO im Yazi-TUI-Stil — erster statischer Draft.
-// Konzept & Roadmap: docs/PROJEKTBRIEF.md — Interaktion (j/k, Enter) folgt.
-const nav = [
-  { name: "projekte/", kind: "dir", note: "ausgewählte Arbeiten" },
-  { name: "cv.md", kind: "file", note: "Lebenslauf" },
-  { name: "blog/", kind: "dir", note: "Artikel & Notizen" },
-  { name: "kontakt.md", kind: "file", note: "Erreichbarkeit" },
-];
-const selected = nav[0];
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const DEFAULT_HREF = "/welcome/";
+
+const { entries } = await rootVMs(DEFAULT_HREF);
+const preview = entries.find((entry) => entry.selected);
+if (!preview) throw new Error("Root view needs exactly one selected entry");
 ---
 
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>nikolaus@portfolio — ~/{selected.name}</title>
-    <style is:global>
-      /* Yazi-Flavor "tokyo-night" als Startpunkt — Flavor-System: github.com/yazi-rs/flavors */
-      :root {
-        --bg: #1a1b26; --bg-dark: #16161e; --fg: #c0caf5; --dim: #565f89;
-        --dir: #7aa2f7; --file: #a9b1d6; --sel: #2f3549; --accent: #bb9af7;
-        --border: #292e42;
-        font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
-      }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--bg); color: var(--fg); }
-      .tui { max-width: 88ch; margin: 2rem auto; font-size: 15px; line-height: 1.6; }
-      header, footer { background: var(--bg-dark); border: 1px solid var(--border); padding: .25rem .75rem; }
-      header .crumb { color: var(--accent); }
-      .panes { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
-      .pane { background: var(--bg); padding: .5rem .75rem; min-height: 16rem; }
-      ul { list-style: none; margin: 0; padding: 0; }
-      li { padding: 0 .5rem; color: var(--file); white-space: pre; }
-      li.sel { background: var(--sel); }
-      li.dir { color: var(--dir); }
-      li.sel::before { content: "▸ "; color: var(--accent); }
-      footer { color: var(--dim); }
-      footer b { color: var(--fg); font-weight: 600; }
-      h2 { font-size: 1rem; margin: 0 0 .5rem; color: var(--dim); font-weight: 600; }
-      a { color: var(--dir); }
-      @media (max-width: 48rem) { .panes { grid-template-columns: 1fr; } }
-    </style>
-  </head>
-  <body>
-    <div class="tui">
-      <header>
-        <span class="crumb">~/nikolaus/</span>portfolio
-      </header>
-      <div class="panes">
-        <section class="pane" aria-label="Dateiliste">
-          <ul>
-            {nav.map((e) => (
-              <li class={`${e.kind}${e === selected ? " sel" : ""}`}>{e.name.padEnd(16, " ")}{e.note}</li>
-            ))}
-          </ul>
-        </section>
-        <section class="pane" aria-label="Vorschau">
-          <h2>/dev/preview — {selected.name}</h2>
-          <p>Hallo! Ich bin Nikolaus — hier entsteht mein Portfolio im Stil des<br />Terminal-Dateimanagers <a href="https://github.com/sxyazi/yazi">yazi</a>.</p>
-          <p>Navigation wie gewohnt: Taste <b>j</b> runter, <b>k</b> rauf, <b>Enter</b> öffnen.</p>
-        </section>
-      </div>
-      <footer>
-        ─ <b>j/k</b> bewegen · <b>⏎</b> öffnen · <b>q</b> schließen · <b>?</b> shortcuts ─
-      </footer>
-    </div>
-  </body>
-</html>
+<TUIShell
+  title="~/"
+  description="Portfolio of Max Mustermann, senior software engineer — as a terminal file manager."
+  crumbs={[{ label: "~" }]}
+  kind="tree"
+  defaultSel={preview.name}
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title={preview.previewTitle} html={preview.previewHTML} />
+</TUIShell>

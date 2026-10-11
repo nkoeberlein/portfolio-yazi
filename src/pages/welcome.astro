@@ -1,0 +1,44 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs, welcomeFetch } from "../lib/rootview";
+import { SITE } from "../site.config";
+
+const { entries, counts } = await rootVMs("/welcome/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("welcome.txt missing from root view");
+---
+
+<TUIShell
+  title="welcome.txt"
+  description={`${SITE.name}, ${SITE.role} — a portfolio that behaves like a terminal file manager.`}
+  crumbs={[{ label: "~", href: "/" }, { label: "welcome.txt" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — welcome.txt">
+    <Prompt cmd="fastfetch" />
+    <div class="fetch-large"><Fragment set:html={welcomeFetch(counts)} /></div>
+    <article class="doc">
+      <h2>getting around</h2>
+      <p>
+        This site is a file manager. The left column is where you came from, the middle one is
+        where you are, the right one previews whatever is selected.
+      </p>
+      <ul>
+        <li><strong>↑ / ↓</strong> move the selection, <strong>→</strong> or <strong>Enter</strong> opens it, <strong>←</strong> goes back up.</li>
+        <li><strong>?</strong> lists every shortcut. Clicking works everywhere, too.</li>
+      </ul>
+      <p>
+        <strong>↳ start with</strong> <a href="/about/">about.md</a>, then <a href="/projects/">projects/</a> and <a href="/now/">now.md</a>.
+      </p>
+    </article>
+  </PreviewPane>
+</TUIShell>

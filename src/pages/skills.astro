@@ -1,0 +1,96 @@
+---
+import FileList from "../components/FileList.astro";
+import ParentPane from "../components/ParentPane.astro";
+import PreviewPane from "../components/PreviewPane.astro";
+import Prompt from "../components/Prompt.astro";
+import TUIShell from "../layouts/TUIShell.astro";
+import { homeParent, statusOf } from "../lib/panes";
+import { rootVMs } from "../lib/rootview";
+
+const { entries } = await rootVMs("/skills/", true);
+const self = entries.find((entry) => entry.selected);
+if (!self) throw new Error("skills.md missing from root view");
+
+/** Zeichenechte Skill-Bar: blöcke + off in `ch`. */
+function bar(level: number, max = 10): string {
+  const on = "█".repeat(level);
+  const off = "░".repeat(max - level);
+  return `${on}<span class="off">${off}</span>`;
+}
+
+const GROUPS: Array<{ name: string; items: Array<{ name: string; level: number; note: string }> }> = [
+  {
+    name: "languages",
+    items: [
+      { name: "Go", level: 9, note: "day job since 2018" },
+      { name: "TypeScript", level: 8, note: "SDCs, tooling, this very site's logic" },
+      { name: "Rust", level: 6, note: "border services, mono-tui" },
+      { name: "SQL", level: 7, note: "Postgres whispering, query fingerprints" },
+    ],
+  },
+  {
+    name: "infrastructure",
+    items: [
+      { name: "Kubernetes", level: 8, note: "operators, janitor, 900 nodes" },
+      { name: "Terraform", level: 7, note: "modules over spaghetti" },
+      { name: "Postgres", level: 8, note: "budgets, lock graphs, replicas" },
+      { name: "Prom/Grafana", level: 8, note: "dashboards that answer, not decorate" },
+      { name: "NATS", level: 6, note: "traffic replay transport" },
+    ],
+  },
+  {
+    name: "practices",
+    items: [
+      { name: "SRE/observability", level: 9, note: "SLOs, error budgets, postmortems" },
+      { name: "code review craft", level: 9, note: "merge criteria over taste wars" },
+      { name: "incident response", level: 8, note: "calm, blamless, written" },
+      { name: "mentoring", level: 7, note: "3 juniors to mid, 1 to senior" },
+    ],
+  },
+  {
+    name: "learning now",
+    items: [
+      { name: "eBPF", level: 3, note: "zero-instrumentation tracing, toy stage" },
+      { name: "Wasm on the edge", level: 2, note: "spike, not production" },
+    ],
+  },
+];
+---
+
+<TUIShell
+  title="skills.md"
+  description="Max Mustermann's toolbox: Go, TypeScript, Rust, Kubernetes, Postgres, observability."
+  crumbs={[{ label: "~", href: "/" }, { label: "skills.md" }]}
+  kind="file"
+  parent="/"
+  status={statusOf(entries)}
+>
+  <ParentPane entries={homeParent()} label="/home" />
+  <FileList entries={entries} ariaLabel="Home directory" />
+  <PreviewPane title="preview — skills.md">
+    <Prompt cmd="cat skills.md" />
+    <article class="doc">
+      <h1>skills.md — toolbox</h1>
+      <p><em>Ratings are honest self-assessment; the notes matter more than the blocks.</em></p>
+      {GROUPS.map((group) => (
+        <>
+          <h2>{group.name}</h2>
+          <table>
+            {group.items.map((item) => (
+              <tr>
+                <td style="min-width: 16ch">{item.name}</td>
+                <td><span class="bar" set:html={bar(item.level)} /></td>
+                <td style="color: var(--dim); padding-left: 2ch">{item.note}</td>
+              </tr>
+            ))}
+          </table>
+        </>
+      ))}
+      <h2>explicitly not</h2>
+      <ul>
+        <li>blockchain (asked repeatedly, declined politely)</li>
+        <li>rewriting the frontend quarterly — this site runs on ~15 KB of vanilla JS precisely to prove the point</li>
+      </ul>
+    </article>
+  </PreviewPane>
+</TUIShell>

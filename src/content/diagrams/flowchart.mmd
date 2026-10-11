@@ -1,0 +1,11 @@
+%% title: Flowchart
+%% summary: Decisions and pipelines — here a deploy gate with an automatic rollback.
+%% updated: 2026-10-11
+flowchart TD
+  push[git push] --> ci{CI green?}
+  ci -->|no| fix[Fix and retry]
+  fix --> push
+  ci -->|yes| canary[Canary 5%]
+  canary --> slo{SLO holds?}
+  slo -->|yes| full[Roll out 100%]
+  slo -->|no| rollback[Rollback]

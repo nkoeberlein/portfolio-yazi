@@ -1,0 +1,15 @@
+%% title: Sequence diagram
+%% summary: Who talks to whom, in which order — a cache miss on a product page.
+%% updated: 2026-10-10
+sequenceDiagram
+  participant B as Browser
+  participant A as API
+  participant C as Cache
+  participant D as Database
+  B->>A: GET /product/42
+  A->>C: lookup
+  C-->>A: miss
+  A->>D: select
+  D-->>A: row
+  A->>C: store (ttl 60s)
+  A-->>B: 200 OK

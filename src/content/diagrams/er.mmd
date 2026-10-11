@@ -1,0 +1,26 @@
+%% title: Entity relationship
+%% summary: Tables and cardinalities — the minimal schema of a feature-flag service.
+%% updated: 2026-10-08
+erDiagram
+  TEAM ||--o{ FLAG : owns
+  FLAG ||--o{ RULE : has
+  FLAG ||--o{ AUDIT_EVENT : records
+  TEAM {
+    int id PK
+    string name
+  }
+  FLAG {
+    int id PK
+    string key
+    boolean enabled
+  }
+  RULE {
+    int id PK
+    string segment
+    int rollout
+  }
+  AUDIT_EVENT {
+    int id PK
+    string actor
+    datetime at
+  }
