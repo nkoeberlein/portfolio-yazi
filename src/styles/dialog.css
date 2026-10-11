@@ -1,0 +1,60 @@
+/* Shortcut-Overlay: natives <dialog>, geöffnet per `?`. */
+
+.shortcut-dialog {
+  width: calc(100% - 2rem);
+  max-width: 64ch;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--bg-dark);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.shortcut-dialog::backdrop {
+  background: color-mix(in srgb, var(--bg-dark) 65%, transparent);
+}
+
+.shortcut-dialog .dlg-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--dim);
+}
+
+.shortcut-dialog .dlg-head button {
+  padding: 0 0.4ch;
+  border: 0;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.shortcut-dialog .dlg-head button:hover {
+  color: var(--fg);
+}
+
+.shortcut-dialog .dlg-body {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1.5rem;
+  padding: 0.85rem 1rem 1rem;
+}
+
+.shortcut-dialog kbd {
+  padding: 0 0.45ch;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: inherit;
+  white-space: pre;
+}
+
+.shortcut-dialog .dlg-foot {
+  padding: 0.4rem 0.85rem 0.6rem;
+  border-top: 1px solid var(--border);
+  color: var(--dim);
+}

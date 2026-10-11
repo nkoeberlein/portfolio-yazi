@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Home directory icon">
+  <title>portfolio home directory</title>
+  <defs>
+    <linearGradient id="n" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c50ed2"/><stop offset="1" stop-color="#00c1e4"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="#161925" stroke="url(#n)" stroke-width="3"/>
+  <text x="10" y="43" font-family="monospace" font-size="28" font-weight="700" fill="url(#n)">~/</text>
+</svg>

@@ -1,0 +1,16 @@
+---
+/**
+ * Shell-Prompt über geöffneten Dokumenten: `user@host ~ $ cat datei.md`.
+ * Der Handle kommt aus `site.config.ts`.
+ */
+import { HANDLE } from "../site.config";
+
+interface Props {
+  /** Der „eingetippte" Befehl, z. B. `cat cv.md` */
+  cmd: string;
+}
+
+const { cmd } = Astro.props;
+---
+
+<p class="doc-prompt"><span class="cmd">{HANDLE} ~ $</span> {cmd}</p>

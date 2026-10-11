@@ -1,0 +1,20 @@
+---
+/**
+ * Rechte Pane: zeigt den markierten Eintrag. Der initiale Inhalt kommt
+ * serverseitig (deep-linkable!) — als `html`-Prop oder Slot. keynav.ts
+ * tauscht ihn per <template> aus und scrollt den Body (`J/K`).
+ */
+interface Props {
+  title: string;
+  html?: string;
+}
+
+const { title, html = "" } = Astro.props;
+---
+
+<aside id="preview" class="pane" aria-label="Preview">
+  <span id="preview-title" class="pane-title" aria-hidden="true">{title} </span>
+  <div id="preview-body" class="pane-body">
+    <slot>{html && <Fragment set:html={html} />}</slot>
+  </div>
+</aside>

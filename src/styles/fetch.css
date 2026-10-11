@@ -1,0 +1,121 @@
+/* Startseiten-Steckbrief im fastfetch-Stil (HTML aus lib/fetch.ts):
+   ASCII-Logo links, Schlüssel/Wert-Zeilen rechts. */
+
+.fetch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2ch;
+  margin: 0.4em 0 1em;
+}
+
+.fetch-art {
+  margin: 0;
+  background: linear-gradient(160deg, var(--magenta), var(--accent) 45%, var(--dir));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  /* ganzzahlige Zeilenhöhe in px, sonst entstehen Haarlinien zwischen den Blockzeilen */
+  line-height: 1.2;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--magenta) 45%, transparent));
+}
+
+.fetch-info {
+  font-size: 14px;
+}
+
+.fetch-info p,
+.fetch-info dl {
+  margin: 0;
+}
+
+.fetch-title {
+  color: var(--dir);
+  font-weight: 700;
+}
+
+.fetch-at {
+  color: var(--fg);
+  font-weight: 400;
+}
+
+.fetch-rule {
+  overflow: hidden;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.fetch-info dl > div {
+  display: grid;
+  grid-template-columns: 9ch minmax(0, 1fr);
+}
+
+.fetch-info dt {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.fetch-info dd {
+  margin: 0;
+  color: var(--file);
+}
+
+.fetch-swatches {
+  display: flex;
+  margin-top: 0.6em;
+}
+
+.fetch-swatches span {
+  width: 3ch;
+  height: 1.1em;
+}
+
+.sw-1 {
+  background: var(--red);
+}
+
+.sw-2 {
+  background: var(--yellow);
+}
+
+.sw-3 {
+  background: var(--green);
+}
+
+.sw-4 {
+  background: var(--dir);
+}
+
+.sw-5 {
+  background: var(--blue);
+}
+
+.sw-6 {
+  background: var(--accent);
+}
+
+.sw-7 {
+  background: var(--magenta);
+}
+
+.sw-8 {
+  background: var(--fg);
+}
+
+/* Geöffnete Datei: mehr Platz, größeres Logo */
+.fetch-large .fetch-art {
+  font-size: 15px;
+}
+
+.fetch-large .fetch-info {
+  font-size: inherit;
+}
+
+@media (max-width: 48rem) {
+  .fetch-art,
+  .fetch-large .fetch-art {
+    font-size: 10px;
+  }
+}

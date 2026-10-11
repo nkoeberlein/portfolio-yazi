@@ -1,0 +1,82 @@
+/* Listen in den Panes: Dateiliste (Mitte), Parent-Liste (links) und die
+   Ordner-Preview (rechts). Spalten ch-genau: [icon 2ch] [name 1fr] [size]. */
+
+.entry-list,
+.pv-ls {
+  list-style: none;
+  margin: 0;
+}
+
+.pv-ls {
+  padding: 0;
+}
+
+.entry,
+.pv-ls li {
+  display: grid;
+  grid-template-columns: 2ch minmax(0, 1fr) auto;
+  align-items: baseline;
+  padding: 0 1ch 0.05rem;
+  border-radius: 0.3rem;
+  color: var(--file);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.entry .c-name,
+.pv-ls .c-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry .c-size {
+  padding-left: 2ch;
+  color: var(--dim);
+  text-align: right;
+}
+
+/* File-Seiten: schmale Mittelspalte, nur Namen */
+.tui[data-kind="file"] .entry .c-size {
+  display: none;
+}
+
+li.dir .glyph,
+li.dir .c-name {
+  color: var(--dir);
+}
+
+li.dir .c-name {
+  font-weight: 700;
+}
+
+li.file .glyph {
+  color: var(--dim);
+}
+
+/* Auswahl: ganze Zeile hinterlegt, im aktiven Pane mit Akzentkante */
+
+li.sel .entry {
+  background: var(--sel);
+  font-weight: 700;
+}
+
+li.sel .entry .c-name {
+  color: var(--fg);
+}
+
+li.dir.sel .entry .c-name {
+  color: var(--dir);
+}
+
+#filelist li.sel .entry {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.entry:hover {
+  background: var(--sel);
+}
+
+.entry:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}

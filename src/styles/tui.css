@@ -1,0 +1,279 @@
+/* TUI-Shell: Vollbild-Terminal aus Header, drei Panes und Statuszeile.
+   Farben ausschließlich über Flavor-Variablen, Raster über ch-Einheiten.
+   Listen: list.css · Dokumente: doc.css · Overlay: dialog.css */
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-dark);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.tui {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* minmax(0, …): sonst weitet nowrap-Inhalt (Statuszeile) die Spalte über den Viewport */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+  height: 100dvh;
+  padding: 0.5rem 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Header: Pfad links, Flavor + Tab rechts */
+
+.tui-head,
+.tui-foot {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--bg);
+}
+
+.tui-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.crumb {
+  overflow: hidden;
+  color: var(--dir);
+  text-overflow: ellipsis;
+}
+
+.crumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.crumb a:hover {
+  text-decoration: underline;
+}
+
+.crumb .cur {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.head-right {
+  display: flex;
+  gap: 1ch;
+}
+
+/* Segmente (Pills) in Header und Statuszeile */
+
+.seg {
+  padding: 0 1ch;
+  border-radius: 999px;
+  color: var(--bg-dark);
+  font-weight: 700;
+}
+
+.seg-mode {
+  background: linear-gradient(90deg, var(--magenta), var(--accent));
+}
+
+.seg-size {
+  background: var(--sel);
+  color: var(--fg);
+  font-weight: 400;
+}
+
+.seg-pos {
+  background: var(--dir);
+}
+
+.seg-tab {
+  background: var(--accent);
+}
+
+/* Panes: [parent 1fr] [current 4fr] [preview 3fr] — File-Seiten 1 : 2 : 5 */
+
+.panes {
+  display: grid;
+  grid-template-columns: minmax(14ch, 1fr) minmax(0, 4fr) minmax(0, 3fr);
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.tui[data-kind="file"] .panes {
+  grid-template-columns: minmax(14ch, 1fr) minmax(0, 2fr) minmax(0, 5fr);
+}
+
+.pane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--bg);
+}
+
+/* Der mittlere Pane ist der aktive. */
+#filepanel {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+
+.pane-full {
+  grid-column: 1 / -1;
+}
+
+.pane-title {
+  position: absolute;
+  top: 0;
+  left: 0.9rem;
+  z-index: 1;
+  max-width: calc(100% - 1.8rem);
+  overflow: hidden;
+  transform: translateY(-50%);
+  padding: 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-dark);
+  color: var(--dim);
+  font-size: 13px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.pane-body {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0.9rem 0.6rem 0.75rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.pane-body:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+  border-radius: 0.6rem;
+}
+
+#preview-body {
+  padding-inline: 1rem;
+}
+
+/* Statuszeile + Keyhints */
+
+.tui-foot {
+  color: var(--dim);
+}
+
+.statusbar,
+.st-left,
+.st-right {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.statusbar {
+  justify-content: space-between;
+  gap: 2ch;
+}
+
+.st-right {
+  flex-shrink: 0;
+}
+
+.st-name {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.st-note {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.keyhints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  margin-top: 0.15rem;
+  font-size: 13px;
+}
+
+.keyhints b {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* Rechtliches: auf jeder Seite, in jeder Breite erreichbar */
+.legal-links {
+  display: flex;
+  gap: 1.25rem;
+  margin-left: auto;
+}
+
+.legal-links a {
+  color: inherit;
+}
+
+.legal-links a:hover {
+  color: var(--fg);
+}
+
+/* Responsiv: unter 64rem ohne Parent-Spalte, unter 48rem Single-Pane */
+
+@media (max-width: 64rem) {
+  #parent {
+    display: none;
+  }
+
+  .panes {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr);
+  }
+
+  .tui[data-kind="file"] .panes {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 5fr);
+  }
+}
+
+@media (max-width: 48rem) {
+  .tui {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .panes,
+  .tui[data-kind="file"] .panes {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0.9rem;
+  }
+
+  .pane-body {
+    overflow-y: visible;
+  }
+
+  .st-note,
+  .st-date,
+  .st-perms,
+  .keyhints .wide {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,129 @@
+---
+import "../styles/global.css";
+import "../styles/tui.css";
+import "../styles/list.css";
+import "../styles/doc.css";
+import "../styles/dialog.css";
+import "../styles/fetch.css";
+import "../styles/mermaid.css";
+import "../styles/fx.css";
+import ShortcutOverlay from "../components/ShortcutOverlay.astro";
+import type { Status } from "../lib/panes";
+import { HANDLE } from "../site.config";
+
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  /** Seitenteil des Titels (z. B. `cv.md`); der Handle wird angehängt */
+  title: string;
+  description: string;
+  /** Pfad ab `~`; der Handle-Crumb davor kommt aus der Shell */
+  crumbs: Crumb[];
+  /** "tree" = Listings mit Auswahl, "file" = geöffnete Datei */
+  kind: "tree" | "file";
+  /** Route des übergeordneten Verzeichnisses (für die Taste `h`) */
+  parent?: string;
+  /** Bei leerem Hash vorselektierter Eintrag (nur kind="tree") */
+  defaultSel?: string;
+  /** Statuszeile des markierten Eintrags, siehe `statusOf()` */
+  status: Status;
+  /** Seite aus Suchmaschinen heraushalten (legal/*) */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  crumbs,
+  kind,
+  parent = "",
+  defaultSel = "",
+  status,
+  noindex = false,
+} = Astro.props;
+
+// Ordner-Labels enden bereits auf `/` — dort kein zusätzlicher Trenner.
+const SEP = '<span aria-hidden="true">/</span>';
+const path: Crumb[] = [{ label: HANDLE, href: "/" }, ...crumbs];
+const crumb = path
+  .map((c, i) => {
+    const sep = i > 0 && !path[i - 1]?.label.endsWith("/") ? SEP : "";
+    const last = i === path.length - 1;
+    const body = last
+      ? `<span class="cur">${c.label}</span>`
+      : c.href
+        ? `<a href="${c.href}">${c.label}</a>`
+        : c.label;
+    return sep + body;
+  })
+  .join("");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{`${title} · ${HANDLE}`}</title>
+  </head>
+  <body>
+    <div
+      class="tui"
+      data-kind={kind}
+      data-parent={parent}
+      data-default={defaultSel}
+      data-home="/"
+    >
+      <header class="tui-head">
+        <span class="crumb" set:html={crumb} />
+        <span class="head-right" aria-hidden="true">
+          <span>fl: sweet</span>
+          <span class="seg seg-tab">1</span>
+        </span>
+      </header>
+
+      <div class="panes">
+        <slot />
+      </div>
+
+      <footer class="tui-foot">
+        <div class="statusbar" aria-hidden="true">
+          <span class="st-left">
+            <span class="seg seg-mode">NOR</span>
+            <span id="st-size" class="seg seg-size">{status.size}</span>
+            <span id="st-name" class="st-name">{status.name}</span>
+            <span id="st-note" class="st-note">{status.note}</span>
+          </span>
+          <span class="st-right">
+            <span id="st-date" class="st-date">{status.date}</span>
+            <span id="st-perms" class="st-perms">{status.perms}</span>
+            <span id="st-pos" class="seg seg-pos">{status.pos}</span>
+          </span>
+        </div>
+        <div class="keyhints">
+          <span><b>↑/↓</b> move</span>
+          <span><b>→/⏎</b> open</span>
+          <span><b>←</b> up</span>
+          <span class="wide"><b>g/G</b> ends</span>
+          <span class="wide"><b>J/K</b> scroll preview</span>
+          <span><b>q</b> home</span>
+          <span><b>?</b> keys</span>
+          <nav class="legal-links" aria-label="Legal">
+            <a href="/legal/imprint/">imprint</a>
+            <a href="/legal/privacy/">privacy</a>
+          </nav>
+        </div>
+      </footer>
+    </div>
+
+    <ShortcutOverlay />
+    <script src="../scripts/keynav.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+---
+/**
+ * Shortcut-Overlay (`?`). Ein natives <dialog>-Element — Esc schließt
+ * browserseitig, keynav.ts öffnet per showModal().
+ */
+---
+
+<dialog id="shortcuts" class="shortcut-dialog" aria-labelledby="shortcuts-title">
+  <div class="dlg-head">
+    <span id="shortcuts-title">── shortcuts ──────────</span>
+    <button type="button" data-close aria-label="Close shortcuts">✕</button>
+  </div>
+  <div class="dlg-body">
+    <kbd>↓ / j</kbd><span>select next entry</span>
+    <kbd>↑ / k</kbd><span>select previous entry</span>
+    <kbd>→ / ⏎ / l</kbd><span>open the selected entry</span>
+    <kbd>← / h</kbd><span>go up one directory</span>
+    <kbd>Home / g</kbd><span>jump to first entry</span>
+    <kbd>End / G</kbd><span>jump to last entry</span>
+    <kbd>J / K</kbd><span>scroll the preview pane</span>
+    <kbd>q</kbd><span>back to ~ (home)</span>
+    <kbd>?</kbd><span>toggle this overlay</span>
+  </div>
+  <div class="dlg-foot">this site works without a keyboard — everything above is also clickable.</div>
+</dialog>

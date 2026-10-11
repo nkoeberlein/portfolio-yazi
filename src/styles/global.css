@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* Self-hosted JetBrains Mono — kept in sync with --font-mono below. */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Flavor "sweet" — Garuda Linux Dr460nized (Sweet-Palette). Flavor-System:
+   github.com/yazi-rs/flavors. --magenta nur als Fläche/Verlauf, nicht als Textfarbe. */
+:root {
+  --bg: #161925;
+  --bg-dark: #0c0e15;
+  --fg: #d3dae3;
+  --dim: #7f88ad;
+  --dir: #00c1e4;
+  --file: #c3c7d1;
+  --sel: #272c40;
+  --accent: #c74ded;
+  --border: #2d3250;
+  --green: #71f79f;
+  --yellow: #f9dc5c;
+  --red: #ed254e;
+  --magenta: #c50ed2;
+  --blue: #7cb7ff;
+}
+
+/* Flavor-Variablen als Tailwind-Tokens: bg-bg, text-dir, border-border, font-mono … */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-dark: var(--bg-dark);
+  --color-fg: var(--fg);
+  --color-dim: var(--dim);
+  --color-dir: var(--dir);
+  --color-file: var(--file);
+  --color-sel: var(--sel);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
+  --color-magenta: var(--magenta);
+  --color-blue: var(--blue);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}

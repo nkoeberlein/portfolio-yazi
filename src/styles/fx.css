@@ -1,0 +1,177 @@
+/* Dr460nized-Effekte: Neon-Verlauf, Glas, Glow. Reine Dekoration über dem
+   Layout aus tui.css/list.css — ohne diese Datei bleibt die TUI flach, aber
+   vollständig. Farben nur aus den Flavor-Variablen. */
+
+:root {
+  --glass: color-mix(in srgb, var(--bg) 70%, transparent);
+  --glow-m: color-mix(in srgb, var(--magenta) 60%, transparent);
+  --glow-c: color-mix(in srgb, var(--dir) 55%, transparent);
+  --neon: linear-gradient(135deg, var(--magenta), var(--accent) 45%, var(--dir));
+}
+
+/* Hintergrund: drei Neon-Wolken auf eigener Ebene (transform-Animation, kein Repaint) */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    radial-gradient(
+      42% 38% at 18% 20%,
+      color-mix(in srgb, var(--magenta) 62%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 38% at 84% 82%,
+      color-mix(in srgb, var(--dir) 50%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      34% 30% at 62% 38%,
+      color-mix(in srgb, var(--accent) 38%, transparent),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) rotate(0deg);
+  }
+
+  to {
+    transform: translate3d(3%, 2%, 0) rotate(6deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    animation: drift 40s ease-in-out infinite alternate;
+  }
+}
+
+/* Glas */
+
+.pane,
+.tui-head,
+.tui-foot,
+.shortcut-dialog {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+}
+
+.pane-title {
+  background: color-mix(in srgb, var(--bg-dark) 88%, transparent);
+}
+
+/* Neon-Ring um den aktiven Pane und das Overlay (Maske erhält den Radius) */
+
+#filepanel,
+.shortcut-dialog {
+  border-color: transparent;
+  box-shadow:
+    0 0 30px -8px var(--glow-m),
+    0 0 48px -14px var(--glow-c);
+}
+
+#filepanel::before,
+.shortcut-dialog::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--neon);
+  -webkit-mask:
+    linear-gradient(black 0 0) content-box,
+    linear-gradient(black 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(black 0 0) content-box,
+    linear-gradient(black 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+#filepanel .pane-title {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.shortcut-dialog {
+  border-radius: 0.6rem;
+}
+
+/* Auswahl und Hover */
+
+#filelist li.sel .entry {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--magenta) 40%, transparent),
+    color-mix(in srgb, var(--accent) 18%, transparent) 60%,
+    transparent
+  );
+  box-shadow:
+    inset 2px 0 0 var(--magenta),
+    -8px 0 18px -8px var(--magenta);
+}
+
+#parentlist li.sel .entry {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.entry:hover {
+  background: color-mix(in srgb, var(--dir) 14%, transparent);
+}
+
+/* Pills und Text-Glow */
+
+.seg-mode {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--magenta) 65%, white), var(--dir));
+  box-shadow: 0 0 14px -2px var(--glow-m);
+}
+
+.seg-pos {
+  box-shadow: 0 0 14px -2px var(--glow-c);
+}
+
+.seg-tab {
+  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.crumb .cur,
+.pv-h,
+.doc h1 {
+  text-shadow: 0 0 14px color-mix(in srgb, currentcolor 55%, transparent);
+}
+
+.pv-img img,
+.doc-figure img,
+.doc-cover,
+.mermaid {
+  box-shadow: 0 0 26px -10px var(--glow-m);
+}
+
+/* Fallbacks: ohne Blur bzw. bei reduzierter Transparenz deckend */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass: var(--bg);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass: var(--bg);
+  }
+
+  .pane,
+  .tui-head,
+  .tui-foot,
+  .shortcut-dialog {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
