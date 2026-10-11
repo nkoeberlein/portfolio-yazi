@@ -16,7 +16,7 @@ const projects = defineCollection({
       demo: z.url().optional(),
       updated: z.coerce.date(),
       featured: z.boolean().default(false),
-      /** Optionales Titelbild, Pfad relativ zur Markdown-Datei (src/assets/covers/) */
+      /** Optional cover image, path relative to the markdown file (`src/assets/covers/`) */
       cover: image().optional(),
       coverAlt: z.string().default(""),
     }),
@@ -35,7 +35,7 @@ const blog = defineCollection({
     }),
 });
 
-/** Bilder in ~/pictures/: eine Markdown-Datei pro Bild, Body = Beschreibung. */
+/** Pictures in ~/pictures/: one markdown file per image, body = description. */
 const pictures = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pictures" }),
   schema: ({ image }) =>
@@ -57,7 +57,7 @@ const legal = defineCollection({
   }),
 });
 
-/** Mermaid-Beispiele in ~/diagrams/: echte `.mmd`-Dateien, die Astros glob-Loader nicht kennt. */
+/** Mermaid examples in ~/diagrams/: raw `.mmd` files parsed via custom loader. */
 const diagrams = defineCollection({
   loader: () => readDiagrams("./src/content/diagrams"),
   schema: z.object({

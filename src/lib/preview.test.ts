@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { figure, listing } from "./preview.ts";
 
-test("figure: escaped src/alt/caption, Maße als Attribute", () => {
+test("figure: escapes src/alt/caption and writes dimensions as attributes", () => {
   const html = figure({
     src: "/_astro/a.svg?x=1&y=2",
     width: 1600,
@@ -16,11 +16,11 @@ test("figure: escaped src/alt/caption, Maße als Attribute", () => {
   assert.match(html, /<figcaption>rock &amp; roll<\/figcaption>/);
 });
 
-test("figure: ohne Caption kein <figcaption>", () => {
+test("figure: omits <figcaption> when no caption is provided", () => {
   assert.doesNotMatch(figure({ src: "/a.png", width: 1, height: 1, alt: "" }), /figcaption/);
 });
 
-test("listing: Ordner und Dateien bekommen ihre Klasse", () => {
+test("listing: assigns appropriate CSS class to dirs and files", () => {
   const html = listing(["sub/", "a.md", "b.svg"]);
   assert.equal(html.match(/class="dir"/g)?.length, 1);
   assert.equal(html.match(/class="file"/g)?.length, 2);

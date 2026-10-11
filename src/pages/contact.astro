@@ -6,15 +6,19 @@ import Prompt from "../components/Prompt.astro";
 import TUIShell from "../layouts/TUIShell.astro";
 import { homeParent, statusOf } from "../lib/panes";
 import { rootVMs } from "../lib/rootview";
+import { SITE } from "../site.config";
 
 const { entries } = await rootVMs("/contact/", true);
 const self = entries.find((entry) => entry.selected);
 if (!self) throw new Error("contact.md missing from root view");
+
+const githubHost = SITE.github.replace(/^https?:\/\//, "");
+const linkedinHandle = SITE.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com\//, "");
 ---
 
 <TUIShell
   title="contact.md"
-  description="Contact channels for Max Mustermann: email, GitHub — replies within 24h."
+  description={`Contact channels for ${SITE.name}: email, GitHub — replies within 24h.`}
   crumbs={[{ label: "~", href: "/" }, { label: "contact.md" }]}
   kind="file"
   parent="/"
@@ -29,17 +33,17 @@ if (!self) throw new Error("contact.md missing from root view");
 
       <table>
         <tr><th style="width: 10ch">channel</th><th>address</th></tr>
-        <tr><td>email</td><td><strong>max@mustermann.example</strong> — work &amp; offers</td></tr>
-        <tr><td>github</td><td><strong>github.com/mustermann</strong> — code, issues, PRs</td></tr>
-        <tr><td>linkedin</td><td>in/mustermann — the least interesting channel</td></tr>
-        <tr><td>matrix</td><td>@maxm:matrix.example</td></tr>
+        <tr><td>email</td><td><a href={`mailto:${SITE.email}`}><strong>{SITE.email}</strong></a> — work &amp; offers</td></tr>
+        <tr><td>github</td><td><a href={SITE.github} target="_blank" rel="noopener noreferrer"><strong>{githubHost}</strong></a> — code, issues, PRs</td></tr>
+        <tr><td>linkedin</td><td><a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{linkedinHandle}</a> — the least interesting channel</td></tr>
+        <tr><td>matrix</td><td><a href={`https://matrix.to/#/${SITE.matrix}`} target="_blank" rel="noopener noreferrer">{SITE.matrix}</a></td></tr>
       </table>
 
       <h2>etiquette</h2>
       <ul>
         <li>I reply to everything within <strong>24h</strong>, Europe/Berlin time</li>
-        <li>recruiting: <a href="/cv/">cv.md</a> first, then email — mentioning a specific project earns bonus</li>
-        <li>consulting / code reviews: I keep a small monthly slot; email with scope and timeline</li>
+        <li>recruiting: <a href="/cv/">cv.md</a> first, then <a href={`mailto:${SITE.email}`}>email</a> — mentioning a specific project earns bonus</li>
+        <li>consulting / code reviews: I keep a small monthly slot; <a href={`mailto:${SITE.email}`}>email</a> with scope and timeline</li>
       </ul>
 
       <h2>availability</h2>

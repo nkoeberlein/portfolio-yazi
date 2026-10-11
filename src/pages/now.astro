@@ -6,6 +6,7 @@ import Prompt from "../components/Prompt.astro";
 import TUIShell from "../layouts/TUIShell.astro";
 import { homeParent, statusOf } from "../lib/panes";
 import { rootVMs } from "../lib/rootview";
+import { SITE } from "../site.config";
 
 const { entries } = await rootVMs("/now/", true);
 const self = entries.find((entry) => entry.selected);
@@ -14,7 +15,7 @@ if (!self) throw new Error("now.md missing from root view");
 
 <TUIShell
   title="now.md"
-  description="What Max Mustermann is working on, learning and reading right now."
+  description={`What ${SITE.name} is working on, learning and reading right now.`}
   crumbs={[{ label: "~", href: "/" }, { label: "now.md" }]}
   kind="file"
   parent="/"

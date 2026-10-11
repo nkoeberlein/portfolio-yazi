@@ -6,6 +6,7 @@ import Prompt from "../components/Prompt.astro";
 import TUIShell from "../layouts/TUIShell.astro";
 import { homeParent, statusOf } from "../lib/panes";
 import { rootVMs } from "../lib/rootview";
+import { SITE } from "../site.config";
 
 const { entries } = await rootVMs("/cv/", true);
 const self = entries.find((entry) => entry.selected);
@@ -14,7 +15,7 @@ if (!self) throw new Error("cv.md missing from root view");
 
 <TUIShell
   title="cv.md"
-  description="CV of Max Mustermann, senior software engineer: platform, distributed systems, Go & Rust, Berlin."
+  description={`CV of ${SITE.name}, ${SITE.role.toLowerCase()}: platform, distributed systems, Go & Rust, Berlin.`}
   crumbs={[{ label: "~", href: "/" }, { label: "cv.md" }]}
   kind="file"
   parent="/"
@@ -25,7 +26,7 @@ if (!self) throw new Error("cv.md missing from root view");
   <PreviewPane title="preview — cv.md">
     <Prompt cmd="cat cv.md" />
     <article class="doc">
-      <h1>cv.md — max mustermann</h1>
+      <h1>cv.md — {SITE.name.toLowerCase()}</h1>
 
       <h2>experience</h2>
       <table>

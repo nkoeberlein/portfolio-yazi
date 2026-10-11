@@ -1,7 +1,7 @@
 /**
- * Bausteine für Preview-HTML. Ausgaben sind escaped — sie werden in
- * <template>-Elementen bzw. #preview-body über set:html gerendert.
- * Rein (per `node --test` prüfbar), deshalb Importe mit Dateiendung.
+ * Building blocks for preview pane HTML. All outputs are escaped — they are
+ * rendered via `set:html` in `<template>` elements or directly in `#preview-body`.
+ * Pure and testable via `node --test` (hence the file extension in imports).
  */
 import { esc } from "./format.ts";
 import { iconFor } from "./icons.ts";
@@ -20,13 +20,13 @@ export const kv = (items: Array<[string, string]>): string =>
     )
     .join("");
 
-export const hint = (text: string): string => `<p class="pv-hint">${text}</p>`; // hint darf <b>-Markup enthalten
+export const hint = (text: string): string => `<p class="pv-hint">${text}</p>`; // Hint may contain <b> markup
 
-/** Tastaturhinweis mit <b>-Markern (einziger nicht-escapeter Block). */
+/** Keyboard hint with <b> tags for keys. */
 export const keyHint = (parts: Array<[string, string]>): string =>
   hint(parts.map(([key, label]) => `<b>${esc(key)}</b> ${esc(label)}`).join(" · "));
 
-/** Ordner-Preview wie in Yazi: die Dateiliste des markierten Verzeichnisses. */
+/** Directory preview modeled after Yazi: file list of the highlighted directory. */
 export const listing = (names: string[]): string =>
   `<ul class="pv-ls">${names
     .map(
@@ -43,7 +43,7 @@ export interface FigureSpec {
   caption?: string;
 }
 
-/** Bild für die Preview-Pane. In <template> lädt es erst, wenn es geklont wird. */
+/** Image for the preview pane. When inside `<template>`, it only loads when cloned. */
 export const figure = ({ src, width, height, alt, caption }: FigureSpec): string =>
   `<figure class="pv-img"><img src="${esc(src)}" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async" />${
     caption ? `<figcaption>${esc(caption)}</figcaption>` : ""

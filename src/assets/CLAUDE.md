@@ -1,21 +1,21 @@
 # src/assets
 
-Bilder, die über `astro:assets` laufen (Optimierung, Hash im Dateinamen, feste Maße gegen
-Layout-Sprünge). Statisches ohne Verarbeitung (Fonts, Favicon) liegt in `public/`.
+Images that go through `astro:assets` (optimization, hash in the file name, fixed dimensions
+against layout shifts). Static assets without processing (fonts, favicon) live in `public/`.
 
-## Ordner
+## Folders
 
-- `pictures/` — Bilder für `~/pictures/`; je Datei ein Eintrag in `src/content/pictures/`.
-- `covers/` — Titelbilder für Projekte und Posts (`cover:` im Frontmatter).
+- `pictures/` — images for `~/pictures/`; one entry per file in `src/content/pictures/`.
+- `covers/` — title images for projects and posts (`cover:` in the frontmatter).
 
-## Muster
+## Patterns
 
-- Die aktuellen SVGs sind generierte Platzhalter in den Flavor-Farben. Echte Bilder als JPG/PNG
-  ablegen und im Frontmatter verlinken – Astro erzeugt daraus WebP in den nötigen Breiten.
-- Cover im Querformat (ca. 5:2); sie werden auf 16rem Höhe beschnitten (`.doc-cover`).
-- Empfohlen: Bilder ≤ 2400 px Kantenlänge, Alt-Text immer im Frontmatter pflegen.
+- The current SVGs are generated placeholders in the flavor colors. Put real images as JPG/PNG
+  here and link them in the frontmatter — Astro generates WebP at the required widths.
+- Covers in landscape (approx. 5:2); they are cropped to 16rem height (`.doc-cover`).
+- Recommended: images ≤ 2400 px on the longest edge; always maintain alt text in the frontmatter.
 
-## Stolpersteine
+## Pitfalls
 
-- SVGs werden nicht umgerechnet, sondern unverändert ausgeliefert.
-- Hex-Farben sind hier erlaubt (Bilddateien), in Komponenten und CSS weiterhin nicht.
+- SVGs are not transformed but served as-is.
+- Hex colors are allowed here (image files); in components and CSS they still are not.

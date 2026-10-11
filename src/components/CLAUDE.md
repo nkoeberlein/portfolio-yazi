@@ -1,35 +1,37 @@
 # src/components
 
-Die Panes der TUI und das Shortcut-Overlay. Reine Astro-Komponenten ohne Client-Framework.
+The panes of the TUI and the shortcut overlay. Plain Astro components without a client framework.
 
-## Dateien
+## Files
 
-- `ParentPane.astro` — linke Pane (`#parent`): übergeordnetes Verzeichnis als Linkliste, der
-  aktuelle Ordner trägt `.sel` + `aria-current="true"`. Props: `entries` (`ParentEntry[]` aus
-  `lib/panes.ts`), `label` (Pfad im Rahmentitel).
-- `FileList.astro` — mittlere Pane (`#filepanel` / `#filelist`): exportiert den Typ `EntryVM`.
-  Jede Zeile ist ein echter `<a>`, optional mit `<template>` für die Preview.
-- `PreviewPane.astro` — rechte Pane (`#preview` / `#preview-body`): Inhalt per `html`-Prop
-  (Tree-Seiten) oder Slot (File-Seiten).
-- `ShortcutOverlay.astro` — natives `<dialog id="shortcuts">`.
-- `Prompt.astro` — `user@host ~ $ <cmd>` über geöffneten Dokumenten (Handle aus `site.config.ts`).
+- `ParentPane.astro` — left pane (`#parent`): parent directory as a link list; the current folder
+  carries `.sel` + `aria-current="true"`. Props: `entries` (`ParentEntry[]` from
+  `lib/panes.ts`), `label` (path in the frame title).
+- `FileList.astro` — middle pane (`#filepanel` / `#filelist`): exports the `EntryVM` type.
+  Every row is a real `<a>`, optionally with a `<template>` for the preview.
+- `PreviewPane.astro` — right pane (`#preview` / `#preview-body`): content via `html` prop
+  (tree pages) or slot (file pages).
+- `ShortcutOverlay.astro` — native `<dialog id="shortcuts">`.
+- `Prompt.astro` — `user@host ~ $ <cmd>` above opened documents (handle from `site.config.ts`).
 
-## Muster
+## Patterns
 
-- Aufbau jeder Pane: `.pane` > `.pane-title` + genau ein `.pane-body` (der Scroller).
-- `keynav.ts` hängt an festen IDs: `#filelist li[data-name]`, `#preview-body`,
-  `#preview-title`, `#shortcuts`. Die Parent-Liste hat bewusst eine eigene ID.
-- `data-size`, `data-date`, `data-note` am `<li>` speisen die Statuszeile – beim Ändern von
-  `EntryVM` mitziehen.
+- Structure of every pane: `.pane` > `.pane-title` + exactly one `.pane-body` (the scroller).
+- `keynav.ts` hooks onto fixed IDs: `#filelist li[data-name]`, `#preview-body`,
+  `#preview-title`, `#shortcuts`. The parent list deliberately has its own ID.
+- `data-size`, `data-date`, `data-note` on the `<li>` feed the status line — when changing
+  `EntryVM`, take them along.
 
-## Stolpersteine
+## Pitfalls
 
-- Texte der Keyhints stehen in `layouts/TUIShell.astro`, die vollständige Liste in
-  `ShortcutOverlay.astro` – bei neuen Tasten beide und den Kopfkommentar von `keynav.ts` pflegen.
+- The key hint texts live in `layouts/TUIShell.astro`, the complete list in
+  `ShortcutOverlay.astro` — when adding new keys, update both plus the header comment of
+  `keynav.ts`.
 
-- `<template>`-Inhalte sind inert: Bilder darin laden erst, wenn keynav sie in die Preview klont.
+- `<template>` contents are inert: images inside them only load once keynav clones them into
+  the preview.
 
-- Kein `tabindex` auf die Panes setzen (Biome `noNoninteractiveTabindex`); gescrollt wird per
-  `J/K` bzw. über den Browser-Fokus scrollbarer Bereiche.
-- Preview-HTML kommt escaped aus `lib/preview.ts` und wird per `set:html` gerendert – keine
-  rohen Nutzerdaten durchreichen.
+- Do not set `tabindex` on the panes (Biome `noNoninteractiveTabindex`); scrolling happens via
+  `J/K` or through the browser making scrollable areas focusable.
+- Preview HTML arrives escaped from `lib/preview.ts` and is rendered via `set:html` — never
+  pass raw user data through.

@@ -6,6 +6,7 @@ import PreviewPane from "../../components/PreviewPane.astro";
 import TUIShell from "../../layouts/TUIShell.astro";
 import { rootParent, statusOf } from "../../lib/panes";
 import { pictureVMs } from "../../lib/pictures";
+import { SITE } from "../../site.config";
 
 const pictures = await getCollection("pictures");
 const entries = await pictureVMs(pictures);
@@ -16,10 +17,9 @@ if (!first) throw new Error("Pictures directory needs at least one entry");
 
 <TUIShell
   title="~/pictures/"
-  description="Pictures and doodles by Max Mustermann."
+  description={`Pictures and doodles by ${SITE.name}.`}
   crumbs={[{ label: "~", href: "/" }, { label: "pictures/" }]}
   kind="tree"
-  defaultSel={first.name}
   parent="/"
   status={statusOf(entries)}
 >

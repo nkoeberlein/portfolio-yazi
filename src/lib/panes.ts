@@ -1,15 +1,16 @@
 /**
- * Daten für die Rahmen-Panes: die Parent-Spalte (links) und die Statuszeile
- * des markierten Eintrags. Rein und ohne `astro:content` — per `node --test`
- * prüfbar (deshalb der Import mit Dateiendung).
+ * Data builders for surrounding panes: the parent column (left) and the status line
+ * of the highlighted entry. Pure and independent of `astro:content` — testable via
+ * `node --test` (hence the file extension in imports).
  */
+import { SITE } from "../site.config.ts";
 import { type EntryKind, ROOT } from "./tree.ts";
 
 export interface ParentEntry {
   name: string;
   kind: EntryKind;
   href: string;
-  /** Der Ordner, in dem sich die mittlere Spalte gerade befindet */
+  /** The folder currently opened in the middle column */
   active: boolean;
 }
 
@@ -19,11 +20,11 @@ export interface Status {
   size: string;
   date: string;
   perms: string;
-  /** Position in der Liste, z. B. `3/6` */
+  /** List position, e.g. `3/6` */
   pos: string;
 }
 
-/** Was `statusOf()` von einem EntryVM braucht. */
+/** Fields required by `statusOf()` from an EntryVM. */
 export interface StatusSource {
   name: string;
   kind: EntryKind;
@@ -33,12 +34,12 @@ export interface StatusSource {
   selected: boolean;
 }
 
-/** Parent von `~`: `/home` mit dem einen Benutzerverzeichnis. */
+/** Parent of `~`: `/home` containing the user directory. */
 export function homeParent(): ParentEntry[] {
-  return [{ name: "max/", kind: "dir", href: "/", active: true }];
+  return [{ name: `${SITE.user}/`, kind: "dir", href: "/", active: true }];
 }
 
-/** Parent von `~/projects/` bzw. `~/blog/`: der Root-Baum, aktueller Ordner markiert. */
+/** Parent of `~/projects/` or `~/blog/`: the root tree with active folder highlighted. */
 export function rootParent(activeHref: string): ParentEntry[] {
   if (!ROOT.some((entry) => entry.href === activeHref)) {
     throw new Error(`Unknown tree entry: ${activeHref}`);
@@ -50,7 +51,7 @@ export function permsOf(kind: EntryKind): string {
   return kind === "dir" ? "drwxr-xr-x" : "-rw-r--r--";
 }
 
-/** Statuszeile für den selektierten Eintrag (ohne Auswahl: der erste). */
+/** Status line for the highlighted entry (defaults to the first entry if none selected). */
 export function statusOf(entries: StatusSource[]): Status {
   const index = Math.max(
     0,

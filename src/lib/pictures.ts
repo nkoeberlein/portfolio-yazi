@@ -1,6 +1,6 @@
 /**
- * EntryVMs für `~/pictures/`: Bilddateien als Einträge, die Preview zeigt das
- * Bild (wie Yazi). Größenspalte = Pixelmaße, da es keine echte Dateigröße gibt.
+ * EntryVMs for `~/pictures/`: image files as listing entries, the preview renders
+ * the image (like Yazi). The size column shows pixel dimensions, since there is no actual file size.
  */
 import type { CollectionEntry } from "astro:content";
 import type { EntryVM } from "../components/FileList.astro";
@@ -11,7 +11,7 @@ import { keyHint, kv } from "./preview";
 
 type PictureEntry = CollectionEntry<"pictures">;
 
-/** neueste zuerst */
+/** Newest first */
 const pictureOrder = (a: PictureEntry, b: PictureEntry): number =>
   b.data.taken.getTime() - a.data.taken.getTime();
 

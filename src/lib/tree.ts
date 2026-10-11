@@ -1,25 +1,24 @@
 /**
- * Der öffentliche Dateibaum des Portfolios.
+ * The public file tree of the portfolio.
  *
- * Jede Route wird durch genau EINEN Eintrag aus diesem Baum repräsentiert:
- * das ist die Single Source of Truth für Seitenlisten, Breadcrumbs und
- * die Root-Ansicht `~/`. Ordner in echten Verzeichnissen zusammenfassen
- * mit `directory()` (siehe unten).
+ * Every route is represented by exactly ONE entry in this tree:
+ * it acts as the single source of truth for page listings, breadcrumbs,
+ * and the root view `~/`.
  */
 
 export type EntryKind = "dir" | "file";
 
 export interface Entry {
-  /** Dateiname inkl. Extension bzw. Ordnername inkl. `/` */
+  /** Filename including extension or folder name including trailing `/` */
   name: string;
   kind: EntryKind;
-  /** Statische Route, zu der der Eintrag gehört (deep-linkable) */
+  /** Static route corresponding to the entry (deep-linkable) */
   href: string;
-  /** Einspaltige Beschreibung für die Listen-Pane */
+  /** One-column brief note for the listing pane */
   note: string;
 }
 
-/** Die „Heimat-Verzeichnisse" des Baums, in Yazi-Anordnung (Ordner zuerst). */
+/** Root entries in Yazi ordering (folders first). */
 export const ROOT: Entry[] = [
   { name: "projects/", kind: "dir", href: "/projects/", note: "selected work" },
   { name: "blog/", kind: "dir", href: "/blog/", note: "articles & notes" },
@@ -34,8 +33,10 @@ export const ROOT: Entry[] = [
   { name: "contact.md", kind: "file", href: "/contact/", note: "reach me" },
 ];
 
-/** Sucht einen Eintrag des Baums anhand der Route (z. B. "/cv/").
- * Wirft bei Unbekanntem — Tippfehler in Seiten sollen beim Build knallen. */
+/**
+ * Finds an entry in the tree by its route (e.g. "/cv/").
+ * Throws on unknown routes to fail the build early on typos.
+ */
 export function findEntry(href: string): Entry {
   const hit = ROOT.find((entry) => entry.href === href);
   if (!hit) throw new Error(`Unknown tree entry: ${href}`);

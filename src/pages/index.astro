@@ -5,6 +5,7 @@ import PreviewPane from "../components/PreviewPane.astro";
 import TUIShell from "../layouts/TUIShell.astro";
 import { homeParent, statusOf } from "../lib/panes";
 import { rootVMs } from "../lib/rootview";
+import { SITE } from "../site.config";
 
 const DEFAULT_HREF = "/welcome/";
 
@@ -15,10 +16,9 @@ if (!preview) throw new Error("Root view needs exactly one selected entry");
 
 <TUIShell
   title="~/"
-  description="Portfolio of Max Mustermann, senior software engineer — as a terminal file manager."
+  description={`Portfolio of ${SITE.name}, ${SITE.role.toLowerCase()} — as a terminal file manager.`}
   crumbs={[{ label: "~" }]}
   kind="tree"
-  defaultSel={preview.name}
   status={statusOf(entries)}
 >
   <ParentPane entries={homeParent()} label="/home" />

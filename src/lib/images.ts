@@ -1,12 +1,12 @@
 /**
- * Brücke zwischen `astro:assets` und den Preview-Bausteinen: optimiert ein
- * Collection-Bild auf Preview-Breite und liefert das fertige <figure>-HTML.
+ * Bridge between `astro:assets` and preview components: optimizes a
+ * collection image for the preview pane and generates the final `<figure>` HTML.
  */
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { figure } from "./preview";
 
-/** Breite der Preview-Variante in px (Pane ≈ 3/8 des Viewports, 2x-Displays). */
+/** Width of the preview variant in px (preview pane ≈ 3/8 of viewport, retina 2x). */
 const PREVIEW_WIDTH = 960;
 
 export async function figureFor(
@@ -18,6 +18,6 @@ export async function figureFor(
   return figure({ src: optimized.src, width: image.width, height: image.height, alt, caption });
 }
 
-/** Wie `figureFor`, aber leer, wenn der Eintrag kein Bild hat (optionale Cover). */
+/** Like `figureFor`, but returns an empty string if no image is provided (optional covers). */
 export const coverFor = async (image: ImageMetadata | undefined, alt: string): Promise<string> =>
   image ? figureFor(image, alt) : "";

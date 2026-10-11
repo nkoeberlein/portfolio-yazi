@@ -6,6 +6,7 @@ import PreviewPane from "../../components/PreviewPane.astro";
 import TUIShell from "../../layouts/TUIShell.astro";
 import { postVMs } from "../../lib/listing";
 import { rootParent, statusOf } from "../../lib/panes";
+import { SITE } from "../../site.config";
 
 const posts = await getCollection("blog");
 const entries = await postVMs(posts);
@@ -16,10 +17,9 @@ if (!first) throw new Error("Blog directory needs at least one entry");
 
 <TUIShell
   title="~/blog/"
-  description="Articles & notes by Max Mustermann on platform engineering, performance and engineering culture."
+  description={`Articles & notes by ${SITE.name} on platform engineering, performance and engineering culture.`}
   crumbs={[{ label: "~", href: "/" }, { label: "blog/" }]}
   kind="tree"
-  defaultSel={first.name}
   parent="/"
   status={statusOf(entries)}
 >

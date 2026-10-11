@@ -1,37 +1,37 @@
 # src
 
-Quellcode der Astro-Seite. Überblick: Root-`CLAUDE.md`.
+Source code of the Astro site. Overview: root `CLAUDE.md`.
 
-## Struktur
+## Structure
 
-- `layouts/TUIShell.astro` — zentrales Layout: Header (Breadcrumb), `<slot/>` für die drei
-  Panes, Footer (Statuszeile aus `status`-Prop + Keyhints), Shortcut-Dialog, lädt `keynav.ts`.
-- `components/ParentPane.astro` — linke Pane; übergeordnetes Verzeichnis, reine Links.
-- `components/FileList.astro` — mittlere Pane; EntryVMs → ch-ausgerichtete Grid-Zeilen, jeder
-  Eintrag echter `<a>` + optionales `<template>` mit Preview-HTML.
-- `components/PreviewPane.astro` — rechte Pane; initialer Inhalt via `html`-Prop oder Slot,
-  keynav tauscht per `<template>`.
-- `components/ShortcutOverlay.astro` — natives `<dialog>` (Taste `?`).
-- `site.config.ts` — Angaben zur Person; erste Anlaufstelle für Theme-Nutzer.
-- `pages/` — `index.astro` (Root), `projects/`, `blog/`, `pictures/`, `diagrams/`, `legal/`
-  (Ordner + `[slug]`-Seiten), `welcome/about/now/cv/skills/contact` (Leaf-Seiten), `404.astro`.
-  Hier liegt bewusst kein `CLAUDE.md`: Astro würde daraus die Route `/CLAUDE/` bauen.
-- `lib/` — `tree.ts` (Root-Baum), `panes.ts` (Parent-Spalte + Statuszeile), `rootview.ts`
-  (Root-VMs), `listing.ts` (Collection-VMs), `pictures.ts` + `images.ts` (Bilder),
-  `preview.ts` (escapete Preview-HTML-Bausteine), `format.ts` (size/date/esc), `icons.ts`.
-- `scripts/keynav.ts` — Vanilla-Keynav (Progressive Enhancement, kein Framework).
-- `content.config.ts` + `content/` — Collections `projects`, `blog`, `pictures`, `legal`,
+- `layouts/TUIShell.astro` — central layout: header (breadcrumb), `<slot/>` for the three panes,
+  footer (status line from the `status` prop + key hints), shortcut dialog, loads `keynav.ts`.
+- `components/ParentPane.astro` — left pane; parent directory, plain links.
+- `components/FileList.astro` — middle pane; EntryVMs → ch-aligned grid rows, each entry a real
+  `<a>` plus an optional `<template>` with preview HTML.
+- `components/PreviewPane.astro` — right pane; initial content via `html` prop or slot, keynav
+  swaps it via `<template>`.
+- `components/ShortcutOverlay.astro` — native `<dialog>` (key `?`).
+- `site.config.ts` — personal details; first stop for theme users.
+- `pages/` — `index.astro` (root), `projects/`, `blog/`, `pictures/`, `diagrams/`, `legal/`
+  (folders + `[slug]` pages), `welcome/about/now/cv/skills/contact` (leaf pages), `404.astro`.
+  No `CLAUDE.md` lives here on purpose: Astro would build the route `/CLAUDE/` from it.
+- `lib/` — `tree.ts` (root tree), `panes.ts` (parent column + status line), `rootview.ts`
+  (root VMs), `listing.ts` (collection VMs), `pictures.ts` + `images.ts` (images),
+  `preview.ts` (escaped preview HTML building blocks), `format.ts` (size/date/esc), `icons.ts`.
+- `scripts/keynav.ts` — vanilla keynav (progressive enhancement, no framework).
+- `content.config.ts` + `content/` — collections `projects`, `blog`, `pictures`, `legal`,
   `diagrams`.
-- `assets/` — Bilder für `astro:assets` (`pictures/`, `covers/`).
+- `assets/` — images for `astro:assets` (`pictures/`, `covers/`).
 
-## Muster
+## Patterns
 
 - EntryVM: `{ name, kind: "dir" | "file", href, note, size, date, selected, previewTitle, previewHTML }`.
-- Selected serverseitig via `aria-current="page"` + `.sel`; keynav respektiert den Hash
-  `#sel=<name>` (deep-linkable, schlägt die Server-Vorauswahl).
-- File-Seiten listen dieselben Geschwister mit `opened=true` — die eigene Datei bekommt kein
-  Template; keynav merkt sich das Dokument und stellt es bei Rückkehr wieder her.
-- Jede Seite rendert drei Slot-Kinder: `<ParentPane>` (`homeParent()` bzw. `rootParent(href)`),
-  `<FileList>`, `<PreviewPane>` und übergibt `status={statusOf(entries)}` an die Shell.
-- Auf `pages/`-Stufe nichts kopieren: Shell und Panes kommen aus dem Layout bzw. den Komponenten.
-- Neue Seiten gehören NICHT nach `pages/`, wenn sie keine Route sind (`lib/`, `scripts/`).
+- Selected server-side via `aria-current="page"` + `.sel`; keynav respects the hash
+  `#sel=<name>` (deep-linkable, overrides the server-side preselection).
+- File pages list the same siblings with `opened=true` — the own file gets no template; keynav
+  remembers the document and restores it when returning.
+- Every page renders three slot children: `<ParentPane>` (`homeParent()` or `rootParent(href)`),
+  `<FileList>`, `<PreviewPane>` and passes `status={statusOf(entries)}` to the shell.
+- Don't copy anything at the `pages/` level: shell and panes come from the layout and components.
+- New files that are not routes do NOT belong in `pages/` (`lib/`, `scripts/`).

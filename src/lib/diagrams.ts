@@ -1,6 +1,6 @@
 /**
- * EntryVMs für `~/diagrams/`: Mermaid-Beispieldateien als Einträge, die Preview
- * zeigt das gerenderte Diagramm. Ein fehlerhaftes Beispiel wirft und stoppt den Build.
+ * EntryVMs for `~/diagrams/`: Mermaid example files as entries, preview
+ * renders the SVG diagram. An invalid diagram fails the build.
  */
 import type { CollectionEntry } from "astro:content";
 import type { EntryVM } from "../components/FileList.astro";

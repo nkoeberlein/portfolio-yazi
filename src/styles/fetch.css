@@ -1,5 +1,5 @@
-/* Startseiten-Steckbrief im fastfetch-Stil (HTML aus lib/fetch.ts):
-   ASCII-Logo links, Schlüssel/Wert-Zeilen rechts. */
+/* Homepage fastfetch-style bio card (HTML rendered by lib/fetch.ts):
+   ASCII logo on the left, key/value rows on the right. */
 
 .fetch {
   display: flex;
@@ -17,7 +17,7 @@
   color: transparent;
   font-family: var(--font-mono);
   font-size: 10px;
-  /* ganzzahlige Zeilenhöhe in px, sonst entstehen Haarlinien zwischen den Blockzeilen */
+  /* Fixed integer line-height in px prevents subpixel hairlines between Unicode block characters */
   line-height: 1.2;
   filter: drop-shadow(0 0 10px color-mix(in srgb, var(--magenta) 45%, transparent));
 }
@@ -104,18 +104,11 @@
   background: var(--fg);
 }
 
-/* Geöffnete Datei: mehr Platz, größeres Logo */
+/* Opened document mode: more space, larger ASCII logo */
 .fetch-large .fetch-art {
   font-size: 15px;
 }
 
 .fetch-large .fetch-info {
   font-size: inherit;
-}
-
-@media (max-width: 48rem) {
-  .fetch-art,
-  .fetch-large .fetch-art {
-    font-size: 10px;
-  }
 }

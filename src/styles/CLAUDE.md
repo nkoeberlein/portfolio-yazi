@@ -1,56 +1,55 @@
 # src/styles
 
-Globale Stylesheets. Hier liegt der Tailwind-Einstieg, die Farbpalette („Flavor") und das
-TUI-Layout.
+Global stylesheets. This is where the Tailwind entry point, the color palette ("flavor") and the
+TUI layout live.
 
-## Dateien
+## Files
 
-- `global.css` – `@import "tailwindcss"`, die `@font-face`-Deklarationen für das selbst gehostete
-  JetBrains Mono (`public/fonts/`), die Flavor-Variablen in `:root` und der `@theme`-Block, der
-  sie als Tailwind-Tokens veröffentlicht (inkl. `--green/--yellow/--red` für Statusfarben).
-- `tui.css` – die Shell: Vollbild-Grid (`.tui`, `100dvh`), Header, Segment-Pills (`.seg-*`),
-  die drei Panes (`.panes`, `.pane`, `.pane-title`, scrollende `.pane-body`), Statuszeile,
-  Breakpoints (ohne Parent-Spalte unter 64rem, Single-Pane unter 48rem).
-- `list.css` – Listenzeilen (`.entry`) für Parent- und Dateiliste, Ordner-Preview (`.pv-ls`),
-  Auswahl-/Hover-/Fokus-States.
-- `doc.css` – Preview-Bausteine (`.pv-*`), Dokumente (`.doc`, `.doc-prompt`), Skill-Bars,
-  Bilder. Nahe am 300-Zeilen-Limit – Neues in eine eigene Datei.
-- `dialog.css` – Shortcut-Overlay.
-- `fetch.css` – Steckbrief der Startseite (`.fetch`, ASCII-Logo mit Verlauf, Farbleiste).
-- `mermaid.css` – `.mermaid`: Rahmen, Skalierung und die Abbildung der Diagramm-Variablen
-  (`--line/--muted/--surface/--border`) auf den Flavor.
-- `fx.css` – der Dr460nized-Look: Neon-Wolken (`body::before`), Glas (`--glass` +
-  `backdrop-filter`), Neon-Ring am aktiven Pane, Auswahl-Verlauf, Glow. Zuletzt importiert.
+- `global.css` – `@import "tailwindcss"`, the `@font-face` declarations for the self-hosted
+  JetBrains Mono (`public/fonts/`), the flavor variables in `:root` and the `@theme` block that
+  exposes them as Tailwind tokens (incl. `--green/--yellow/--red` for status colors).
+- `tui.css` – the shell: fullscreen grid (`.tui`, `100dvh`), header, segment pills (`.seg-*`),
+  the three panes (`.panes`, `.pane`, `.pane-title`, scrolling `.pane-body`), status line,
+  breakpoints (no parent column below 64rem, single pane below 48rem).
+- `list.css` – list rows (`.entry`) for the parent and file lists, folder preview (`.pv-ls`),
+  selection/hover/focus states.
+- `doc.css` – preview building blocks (`.pv-*`), documents (`.doc`, `.doc-prompt`), skill bars,
+  images. Close to the 300-line limit — put additions in a new file.
+- `dialog.css` – shortcut overlay.
+- `fetch.css` – the home page spec sheet (`.fetch`, ASCII logo with gradient, color bar).
+- `mermaid.css` – `.mermaid`: frame, scaling, and the mapping of the diagram variables
+  (`--line/--muted/--surface/--border`) onto the flavor.
+- `fx.css` – the Dr460nized look: neon clouds (`body::before`), glass (`--glass` +
+  `backdrop-filter`), neon ring on the active pane, selection gradient, glow. Imported last.
 
-Alle sieben werden von `layouts/TUIShell.astro` importiert.
+All seven are imported by `layouts/TUIShell.astro`.
 
-## Muster
+## Patterns
 
-- Zwei Ebenen: `:root` hält die rohen Flavor-Werte (`--bg`, `--dir`, …), `@theme inline` bildet
-  sie auf `--color-*` ab. Daraus entstehen die Utilities `bg-bg`, `text-dir`, `border-border` usw.
-- Neue Farbe = eine Variable in `:root` **und** ein `--color-*`-Eintrag in `@theme`.
-- Ein Flavor-Wechsel tauscht nur den `:root`-Block; `@theme`, die übrigen Stylesheets und die Komponenten
-  bleiben unverändert.
-- `--font-mono` ist die einzige Schriftdefinition; im CSS per `var(--font-mono)`, in Klassen per
-  `font-mono` verwenden.
+- Two levels: `:root` holds the raw flavor values (`--bg`, `--dir`, …), `@theme inline` maps
+  them onto `--color-*`. This yields the utilities `bg-bg`, `text-dir`, `border-border` etc.
+- New color = one variable in `:root` **and** one `--color-*` entry in `@theme`.
+- A flavor swap only replaces the `:root` block; `@theme`, the other stylesheets and the
+  components stay unchanged.
+- `--font-mono` is the single font definition; use it in CSS via `var(--font-mono)` and in
+  classes via `font-mono`.
 
-## Stolpersteine
+## Pitfalls
 
-- Tailwind v4 wird in CSS konfiguriert – es gibt keine `tailwind.config.js`, und es soll keine
-  angelegt werden.
-- `@theme inline` ist nötig, weil die Tokens auf andere Variablen verweisen; ohne `inline` lösen
-  die Utilities den Wert an der falschen Stelle auf.
-- Preflight setzt Abstände von `p`, `h*`, `ul` und die Link-Unterstreichung zurück. Die
-  Stylesheets hier sind unlayered und schlagen Tailwinds Layer deshalb – absichtlich.
-- Biome parst `@theme`/`@apply` nur, weil `css.parser.tailwindDirectives` in `biome.json` aktiv
-  ist.
-- Die Grid-Spalten der Liste sind `[icon 2ch] [name 1fr] [size auto]`; auf File-Seiten
-  (`.tui[data-kind="file"]`) entfällt die Größe. Datum und Note stehen in der Statuszeile.
-- `.pane` darf kein `overflow` bekommen – der `.pane-title` sitzt auf dem Rahmen und würde
-  abgeschnitten. Gescrollt wird nur in `.pane-body`.
-- Der aktuelle Flavor ist „sweet" (Garuda Dr460nized). `--magenta` ist nur Fläche/Verlauf, als
-  Textfarbe zu kontrastarm – dafür `--accent`.
-- `.tui` braucht `grid-template-columns: minmax(0, 1fr)` – ohne das weitet die `nowrap`-
-  Statuszeile das Layout über den Viewport.
-- `fx.css`: `--glass` nicht unter ~70 % Deckkraft senken (Kontrast von `--dim`); Fallbacks für
-  fehlendes `backdrop-filter` und `prefers-reduced-transparency` stehen am Dateiende.
+- Tailwind v4 is configured in CSS — there is no `tailwind.config.js` and none should be added.
+- `@theme inline` is necessary because the tokens reference other variables; without `inline`
+  the utilities resolve the value in the wrong place.
+- Preflight resets the spacing of `p`, `h*`, `ul` and the link underline. The stylesheets here
+  are unlayered and therefore beat Tailwind's layers — on purpose.
+- Biome only parses `@theme`/`@apply` because `css.parser.tailwindDirectives` is enabled in
+  `biome.json`.
+- The grid columns of the list are `[icon 2ch] [name 1fr] [size auto]`; on file pages
+  (`.tui[data-kind="file"]`) the size is dropped. Date and note live in the status line.
+- `.pane` must not get an `overflow` — the `.pane-title` sits on the frame and would be cut off.
+  Only `.pane-body` scrolls.
+- The current flavor is "sweet" (Garuda Dr460nized). `--magenta` is background/gradient only; as
+  a text color it lacks contrast — use `--accent` instead.
+- `.tui` needs `grid-template-columns: minmax(0, 1fr)` — without it the `nowrap` status line
+  stretches the layout beyond the viewport.
+- `fx.css`: do not lower `--glass` below ~70% opacity (contrast of `--dim`); fallbacks for a
+  missing `backdrop-filter` and `prefers-reduced-transparency` are at the end of the file.

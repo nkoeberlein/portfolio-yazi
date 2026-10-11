@@ -6,12 +6,13 @@ import Prompt from "../components/Prompt.astro";
 import TUIShell from "../layouts/TUIShell.astro";
 import { homeParent, statusOf } from "../lib/panes";
 import { rootVMs } from "../lib/rootview";
+import { SITE } from "../site.config";
 
 const { entries } = await rootVMs("/skills/", true);
 const self = entries.find((entry) => entry.selected);
 if (!self) throw new Error("skills.md missing from root view");
 
-/** Zeichenechte Skill-Bar: blöcke + off in `ch`. */
+/** Monospace character-based skill bar: on + off blocks in `ch`. */
 function bar(level: number, max = 10): string {
   const on = "█".repeat(level);
   const off = "░".repeat(max - level);
@@ -59,7 +60,7 @@ const GROUPS: Array<{ name: string; items: Array<{ name: string; level: number; 
 
 <TUIShell
   title="skills.md"
-  description="Max Mustermann's toolbox: Go, TypeScript, Rust, Kubernetes, Postgres, observability."
+  description={`${SITE.name}'s toolbox: ${SITE.stack.join(", ")}, Kubernetes, Postgres, observability.`}
   crumbs={[{ label: "~", href: "/" }, { label: "skills.md" }]}
   kind="file"
   parent="/"

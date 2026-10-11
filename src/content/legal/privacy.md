@@ -9,9 +9,10 @@ updated: 2026-10-11
 
 ## In short
 
-This is a static website. It sets **no cookies**, runs **no analytics or tracking**, embeds
+This is a static website. By default it sets **no cookies**, runs **no analytics or tracking**, embeds
 **no third-party content** and has no forms, accounts or comments. Fonts and images are served
-from this domain.
+from this domain. (If you enable the optional Simple Analytics setting in `src/site.config.ts`,
+note that it is cookie-free and privacy-preserving, but update this notice accordingly).
 
 ## Controller
 

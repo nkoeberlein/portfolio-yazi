@@ -1,13 +1,13 @@
 /**
- * Liest die Mermaid-Beispieldateien (`src/content/diagrams/*.mmd`) für die
- * Collection `diagrams`. Metadaten stehen als Kommentarkopf in der Datei:
+ * Reads Mermaid example files (`src/content/diagrams/*.mmd`) for the
+ * `diagrams` collection. Metadata is stored as a header comment in each file:
  *
  *   %% title: Flowchart
  *   %% summary: Decisions and pipelines.
  *   %% updated: 2026-10-11
  *   flowchart TD …
  *
- * Rein bis auf `readDiagrams` (Dateisystem); per `node --test` prüfbar.
+ * Pure except for `readDiagrams` (filesystem); testable via `node --test`.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -17,7 +17,7 @@ export interface DiagramFile {
   title: string;
   summary: string;
   updated: string;
-  /** Mermaid-Quelltext ohne den Kommentarkopf */
+  /** Mermaid source code excluding the comment header */
   code: string;
 }
 
@@ -49,7 +49,7 @@ export function parseDiagramFile(id: string, text: string): DiagramFile {
   };
 }
 
-/** Alle `.mmd`-Dateien eines Verzeichnisses, alphabetisch. */
+/** All `.mmd` files in a directory, sorted alphabetically. */
 export function readDiagrams(dir: string): DiagramFile[] {
   return readdirSync(dir)
     .filter((file) => file.endsWith(".mmd"))

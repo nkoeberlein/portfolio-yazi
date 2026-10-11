@@ -1,6 +1,6 @@
-/* TUI-Shell: Vollbild-Terminal aus Header, drei Panes und Statuszeile.
-   Farben ausschließlich über Flavor-Variablen, Raster über ch-Einheiten.
-   Listen: list.css · Dokumente: doc.css · Overlay: dialog.css */
+/* TUI shell: full-height terminal layout consisting of header, three panes, and status bar.
+   Colors strictly governed by flavor variables; raster alignment in monospace `ch` units.
+   Listings: list.css · Documents: doc.css · Overlay: dialog.css */
 
 :root {
   color-scheme: dark;
@@ -18,7 +18,7 @@ body {
 .tui {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  /* minmax(0, …): sonst weitet nowrap-Inhalt (Statuszeile) die Spalte über den Viewport */
+  /* minmax(0, …): prevents nowrap content (status bar) from expanding the column past viewport */
   grid-template-columns: minmax(0, 1fr);
   gap: 0.8rem;
   height: 100dvh;
@@ -26,7 +26,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Header: Pfad links, Flavor + Tab rechts */
+/* Header: path on the left, flavor + active tab indicator on the right */
 
 .tui-head,
 .tui-foot {
@@ -69,7 +69,7 @@ body {
   gap: 1ch;
 }
 
-/* Segmente (Pills) in Header und Statuszeile */
+/* Segments (pills) in header and status bar */
 
 .seg {
   padding: 0 1ch;
@@ -96,7 +96,7 @@ body {
   background: var(--accent);
 }
 
-/* Panes: [parent 1fr] [current 4fr] [preview 3fr] — File-Seiten 1 : 2 : 5 */
+/* Panes: [parent 1fr] [current 4fr] [preview 3fr] — file pages use 1 : 2 : 5 */
 
 .panes {
   display: grid;
@@ -120,7 +120,7 @@ body {
   background: var(--bg);
 }
 
-/* Der mittlere Pane ist der aktive. */
+/* Middle pane is the active panel. */
 #filepanel {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
 }
@@ -168,7 +168,7 @@ body {
   padding-inline: 1rem;
 }
 
-/* Statuszeile + Keyhints */
+/* Status bar + key hints */
 
 .tui-foot {
   color: var(--dim);
@@ -216,7 +216,7 @@ body {
   font-weight: 600;
 }
 
-/* Rechtliches: auf jeder Seite, in jeder Breite erreichbar */
+/* Legal links: always accessible across all pages and viewport widths */
 .legal-links {
   display: flex;
   gap: 1.25rem;
@@ -231,7 +231,7 @@ body {
   color: var(--fg);
 }
 
-/* Responsiv: unter 64rem ohne Parent-Spalte, unter 48rem Single-Pane */
+/* Responsive: hide parent column below 64rem, single-pane below 48rem */
 
 @media (max-width: 64rem) {
   #parent {

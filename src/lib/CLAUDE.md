@@ -1,45 +1,45 @@
 # src/lib
 
-Datenaufbereitung für die Seiten: aus Baum und Content Collections werden View-Models und
-Preview-HTML. Kein DOM-Code (der liegt in `scripts/`).
+Data preparation for the pages: view models and preview HTML are built from the tree and the
+content collections. No DOM code (that lives in `scripts/`).
 
-## Dateien
+## Files
 
-- `tree.ts` — `ROOT`, der Baum `~/` (Single Source of Truth), `findEntry()`.
-- `panes.ts` — `homeParent()`, `rootParent(href)` für die Parent-Spalte, `statusOf(entries)`
-  für die Statuszeile. Rein, ohne `astro:content`.
-- `rootview.ts` — `rootVMs(href, opened?)`: EntryVMs für `~/` inkl. Preview-HTML.
-- `listing.ts` — `projectVMs()` / `postVMs()` (async, wegen Cover) und `legalVMs()`:
-  Collection → EntryVMs, Sortierung.
-- `pictures.ts` — `pictureVMs()` für `~/pictures/` (Name `<id>.<format>`, Größe = Pixelmaße).
-- `images.ts` — `figureFor()` / `coverFor()`: `getImage()` + `figure()`; einziger Ort, der
-  `astro:assets` in `lib/` anfasst.
-- `preview.ts` — escapende HTML-Bausteine (`heading`, `p`, `bullets`, `kv`, `keyHint`,
-  `listing` für Ordner-Previews, `figure` für Bilder). Rein und getestet.
-- `mermaid.ts` — `mermaidFigure()` (Mermaid → `<figure class="mermaid">` mit Inline-SVG),
-  `mermaidPlugin()` (Sätteri-hast-Plugin) und `mermaidGuard()` (Integration, die den Build bei
-  fehlgeschlagenen Diagrammen abbricht). Wird von `astro.config.mjs` importiert.
-- `fetch.ts` — `ASTRO_LOGO` + `fetchHTML()`: Steckbrief der Startseite. Rein und getestet.
-- `diagram-files.ts` — `parseDiagramFile()` / `readDiagrams()`: `.mmd`-Dateien mit
-  `%% key: value`-Kopf lesen (Loader der Collection `diagrams`). `diagrams.ts` — `diagramVMs()`.
+- `tree.ts` — `ROOT`, the `~/` tree (single source of truth), `findEntry()`.
+- `panes.ts` — `homeParent()`, `rootParent(href)` for the parent column, `statusOf(entries)`
+  for the status line. Pure, no `astro:content`.
+- `rootview.ts` — `rootVMs(href, opened?)`: EntryVMs for `~/` incl. preview HTML.
+- `listing.ts` — `projectVMs()` / `postVMs()` (async, because of covers) and `legalVMs()`:
+  collection → EntryVMs, sorting.
+- `pictures.ts` — `pictureVMs()` for `~/pictures/` (name `<id>.<format>`, size = pixel dimensions).
+- `images.ts` — `figureFor()` / `coverFor()`: `getImage()` + `figure()`; the only place in `lib/`
+  that touches `astro:assets`.
+- `preview.ts` — escaping HTML building blocks (`heading`, `p`, `bullets`, `kv`, `keyHint`,
+  `listing` for folder previews, `figure` for images). Pure and tested.
+- `mermaid.ts` — `mermaidFigure()` (mermaid → `<figure class="mermaid">` with inline SVG),
+  `mermaidPlugin()` (Sätteri hast plugin) and `mermaidGuard()` (integration that aborts the
+  build on failed diagrams). Imported by `astro.config.mjs`.
+- `fetch.ts` — `ASTRO_LOGO` + `fetchHTML()`: the home page spec sheet. Pure and tested.
+- `diagram-files.ts` — `parseDiagramFile()` / `readDiagrams()`: reads `.mmd` files with a
+  `%% key: value` header (loader of the `diagrams` collection). `diagrams.ts` — `diagramVMs()`.
 - `format.ts` — `sizeOf`, `dateOf`, `esc`. `icons.ts` — `iconFor()`.
-- `*.test.ts` — Tests neben dem jeweiligen Modul (`npm test`, `node --test`).
+- `*.test.ts` — tests next to each module (`npm test`, `node --test`).
 
-## Muster
+## Patterns
 
-- Neue Tests neben das Modul als `*.test.ts`. Testbar ist nur, was weder `astro:content` noch
-  `.astro`-Laufzeitcode importiert; solche Module importieren relativ **mit** `.ts`-Endung
-  (Node löst sonst nicht auf).
-- `opened=true` heißt „File-Seite": der selektierte Eintrag bekommt leeres `previewHTML`.
-- Unbekannte Routen/Einträge werfen – Tippfehler sollen den Build stoppen.
+- New tests go next to the module as `*.test.ts`. Only modules that import neither `astro:content`
+  nor `.astro` runtime code are testable; such modules import relatively **with** a `.ts`
+  extension (Node otherwise fails to resolve).
+- `opened=true` means "file page": the selected entry gets an empty `previewHTML`.
+- Unknown routes/entries throw — typos should stop the build.
 
-## Stolpersteine
+## Pitfalls
 
-- `mermaid.ts`: Der Renderer baut einen Google-Fonts-`@import` und Inline-Farben ins SVG;
-  `detheme()` entfernt beides (Test sichert das ab). Nicht `var(--bg)` o. Ä. als Option
-  übergeben – das ergäbe `--bg: var(--bg)` am SVG, einen Zyklus. Farben kommen aus `doc.css`.
-- Astro rendert Markdown mit Sätteri, nicht remark/rehype: Plugins sind hast-Visitor
-  (`defineHastPlugin`), HTML wird als `{ type: "raw", value }` zurückgegeben.
+- `mermaid.ts`: the renderer bakes a Google Fonts `@import` and inline colors into the SVG;
+  `detheme()` removes both (a test secures this). Do not pass `var(--bg)` or similar as an
+  option — that would produce `--bg: var(--bg)` on the SVG, a cycle. Colors come from `doc.css`.
+- Astro renders markdown with Sätteri, not remark/rehype: plugins are hast visitors
+  (`defineHastPlugin`), HTML is returned as `{ type: "raw", value }`.
 
-- Alles, was in `previewHTML` landet, muss durch `esc()`; einzige Ausnahme ist `keyHint`.
-- `iconFor()` nur mit Zeichen füllen, die JetBrains Mono enthält (kein Nerd Font).
+- Everything that ends up in `previewHTML` must go through `esc()`; the only exception is `keyHint`.
+- `iconFor()` must be filled only with glyphs that JetBrains Mono contains (no Nerd Font).

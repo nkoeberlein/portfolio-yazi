@@ -1,16 +1,16 @@
 /**
- * Mermaid-Diagramme beim Build: ```mermaid-Codeblöcke werden zu Inline-SVG —
- * kein JavaScript im Browser. Rein (per `node --test` prüfbar).
+ * Mermaid diagrams rendered at build time: ```mermaid code blocks are transformed
+ * into inline SVGs — zero client-side JavaScript. Pure and testable via `node --test`.
  *
- * Farben stehen NICHT im SVG: der Renderer referenziert nur die Variablen
- * --bg/--fg/--line/--accent/--muted/--surface/--border, die `.mermaid` in
- * doc.css auf den Flavor abbildet. So bleibt der Flavor austauschbar.
+ * Colors are NOT hardcoded in the SVG: the renderer references CSS variables
+ * --bg/--fg/--line/--accent/--muted/--surface/--border, which `.mermaid` in
+ * `doc.css` maps to the theme flavor. This allows flavors to remain swappable.
  */
 import { renderMermaidSVG } from "beautiful-mermaid";
 import { defineHastPlugin } from "satteri";
 import { esc } from "./format.ts";
 
-/** Was `beautiful-mermaid` zeichnen kann (kein gantt, pie, mindmap, gitGraph). */
+/** Diagram types supported by `beautiful-mermaid` (excludes gantt, pie, mindmap, gitGraph). */
 export const SUPPORTED = [
   "graph",
   "flowchart",
@@ -22,8 +22,8 @@ export const SUPPORTED = [
   "xychart-beta",
 ] as const;
 
-// Farben sind Platzhalter und werden nach dem Rendern entfernt (siehe `detheme`);
-// engere Abstände, damit auch längere Flowcharts in den Preview-Pane passen.
+// Colors are placeholders stripped after rendering (see `detheme`);
+// tighter spacing ensures tall flowcharts fit within the preview pane.
 const NEUTRAL = {
   bg: "white",
   fg: "black",
@@ -33,9 +33,9 @@ const NEUTRAL = {
 } as const;
 
 /**
- * Entfernt, was der Renderer fest einbaut und hier nicht sein darf:
- * den Google-Fonts-`@import` (kein Drittanbieter-Request, siehe privacy.md)
- * und die Inline-Farben am <svg> (sie würden die Flavor-Variablen überdecken).
+ * Strips hardcoded artifacts inserted by the renderer:
+ * Google Fonts `@import` (prevents third-party requests, see privacy.md)
+ * and inline colors on the `<svg>` (which would override flavor CSS variables).
  */
 function detheme(svg: string): string {
   return svg
@@ -43,7 +43,7 @@ function detheme(svg: string): string {
     .replace(/(<svg\b[^>]*?)\s+style="[^"]*"/, "$1");
 }
 
-/** Mermaid-Quelltext → `<figure class="mermaid">` mit Inline-SVG. Wirft bei Fehlern. */
+/** Mermaid source code → `<figure class="mermaid">` with inline SVG. Throws on error. */
 export function mermaidFigure(code: string, label = "Diagram"): string {
   let svg: string;
   try {
@@ -58,12 +58,12 @@ export function mermaidFigure(code: string, label = "Diagram"): string {
   return `<figure class="mermaid" role="img" aria-label="${esc(label)}">${detheme(svg)}</figure>`;
 }
 
-/** Beschriftung aus der Fence-Meta: ```mermaid alt="Replay pipeline" */
+/** Label extracted from code block fence metadata: ```mermaid alt="Replay pipeline" */
 export function labelFromMeta(meta: string | null | undefined): string | undefined {
   return meta?.match(/alt="([^"]*)"/)?.[1] || undefined;
 }
 
-/** `data.meta` trägt die Fence-Meta, ist in den hast-Typen aber nicht deklariert. */
+/** `data.meta` contains fence metadata, but is untyped in HAST element types. */
 function metaOf(data: unknown): string | undefined {
   if (typeof data !== "object" || data === null || !("meta" in data)) return undefined;
   return typeof data.meta === "string" ? data.meta : undefined;
@@ -71,7 +71,7 @@ function metaOf(data: unknown): string | undefined {
 
 const failures: string[] = [];
 
-/** Astro-Integration: bricht den Build ab, wenn ein Diagramm nicht gerendert werden konnte. */
+/** Astro integration: halts build if any diagram failed rendering. */
 export function mermaidGuard() {
   return {
     name: "mermaid-guard",
@@ -84,7 +84,7 @@ export function mermaidGuard() {
   };
 }
 
-/** Sätteri-hast-Plugin für `astro.config.mjs`; `mermaid` muss von Shiki ausgenommen sein. */
+/** Sätteri HAST plugin for `astro.config.mjs`; `mermaid` must be excluded from Shiki. */
 export function mermaidPlugin() {
   return defineHastPlugin({
     name: "mermaid",
@@ -101,8 +101,8 @@ export function mermaidPlugin() {
           const html = mermaidFigure(ctx.textContent(code), labelFromMeta(metaOf(code.data)));
           return { type: "raw", value: html };
         } catch (error) {
-          // Astros Content-Loader protokolliert Render-Fehler nur und baut weiter —
-          // `mermaidGuard()` lässt den Build deshalb am Ende scheitern.
+          // Astro content loader logs render errors and continues —
+          // `mermaidGuard()` ensures the build ultimately fails on errors.
           failures.push(`${ctx.fileURL?.pathname ?? "?"}: ${String(error)}`);
           throw error;
         }

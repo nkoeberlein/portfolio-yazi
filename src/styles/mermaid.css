@@ -1,6 +1,6 @@
-/* Mermaid-Diagramme (Inline-SVG aus lib/mermaid.ts). Der Renderer liest nur
-   diese Variablen — hier werden sie auf den Flavor abgebildet. --bg, --fg und
-   --accent kommen unverändert aus :root. */
+/* Mermaid diagrams (inline SVG rendered by lib/mermaid.ts). The renderer references
+   these variables — mapped here to the theme flavor. --bg, --fg and --accent are
+   inherited directly from :root. */
 
 .mermaid {
   --line: var(--dim);
@@ -24,7 +24,7 @@
   margin-inline: auto;
 }
 
-/* Hohe Diagramme (TD) nicht über den Pane hinauswachsen lassen */
+/* Tall diagrams (top-down TD) are capped to prevent overflowing the pane */
 @media (min-width: 48.01rem) {
   .mermaid svg {
     width: auto;
@@ -32,7 +32,7 @@
   }
 }
 
-/* Schmal: nicht weiter verkleinern (unlesbar), stattdessen horizontal scrollen */
+/* Narrow screens: prevent shrinking text to illegible sizes; enable horizontal scroll instead */
 @media (max-width: 48rem) {
   .mermaid svg {
     max-width: none;

@@ -1,12 +1,12 @@
 /**
- * Startseiten-Steckbrief im fastfetch-Stil: ASCII-Logo links, Schlüssel/Wert-
- * Zeilen rechts. Rein (per `node --test` prüfbar); Farben kommen aus fetch.css.
+ * Fastfetch-style profile card for the homepage: ASCII logo on the left,
+ * key/value pairs on the right. Pure and testable via `node --test`;
+ * styling and colors are defined in `fetch.css`.
  */
 import { esc } from "./format.ts";
 
-// Astro-Logo: die Rakete mit Kerbe, darunter die Flamme. Nur Block-Elemente,
-// die JetBrains Mono enthält. Spiegelsymmetrisch um die Mittelachse (Test!);
-// Zeilen werden unten auf gleiche Breite gebracht.
+// Astro rocket logo with notch and flame. Composed solely of Unicode block
+// elements included in JetBrains Mono. Symmetrical around the center axis.
 const LOGO_SOURCE = [
   "            ▄██▄",
   "           ██████",
@@ -32,11 +32,11 @@ export const ASTRO_LOGO: readonly string[] = LOGO_SOURCE.map((line) => line.padE
 export interface FetchInfo {
   user: string;
   host: string;
-  /** Zeilen in Anzeigereihenfolge: [Schlüssel, Wert] */
+  /** Rows in display order: [key, value] */
   rows: ReadonlyArray<readonly [string, string]>;
 }
 
-/** Anzahl der Farbfelder unter dem Steckbrief (Klassen `sw-1` … in fetch.css). */
+/** Number of color swatches under the card (`sw-1` ... in `fetch.css`). */
 const SWATCHES = 8;
 
 export function fetchHTML({ user, host, rows }: FetchInfo): string {

@@ -1,6 +1,6 @@
-/* Dr460nized-Effekte: Neon-Verlauf, Glas, Glow. Reine Dekoration über dem
-   Layout aus tui.css/list.css — ohne diese Datei bleibt die TUI flach, aber
-   vollständig. Farben nur aus den Flavor-Variablen. */
+/* Dr460nized effects: neon gradient, frosted glass, subtle glow. Pure decoration
+   layered over the layout in tui.css/list.css — without this file the TUI remains flat
+   yet complete. Colors strictly derived from flavor variables. */
 
 :root {
   --glass: color-mix(in srgb, var(--bg) 70%, transparent);
@@ -9,7 +9,7 @@
   --neon: linear-gradient(135deg, var(--magenta), var(--accent) 45%, var(--dir));
 }
 
-/* Hintergrund: drei Neon-Wolken auf eigener Ebene (transform-Animation, kein Repaint) */
+/* Background: three drifting neon ambient clouds (transform-only animation, no repaints) */
 
 body::before {
   content: "";
@@ -51,7 +51,7 @@ body::before {
   }
 }
 
-/* Glas */
+/* Glass */
 
 .pane,
 .tui-head,
@@ -66,7 +66,7 @@ body::before {
   background: color-mix(in srgb, var(--bg-dark) 88%, transparent);
 }
 
-/* Neon-Ring um den aktiven Pane und das Overlay (Maske erhält den Radius) */
+/* Neon border around active pane and shortcut overlay (gradient border via mask) */
 
 #filepanel,
 .shortcut-dialog {
@@ -104,7 +104,7 @@ body::before {
   border-radius: 0.6rem;
 }
 
-/* Auswahl und Hover */
+/* Selection and hover */
 
 #filelist li.sel .entry {
   background: linear-gradient(
@@ -126,7 +126,7 @@ body::before {
   background: color-mix(in srgb, var(--dir) 14%, transparent);
 }
 
-/* Pills und Text-Glow */
+/* Pills and text glow */
 
 .seg-mode {
   background: linear-gradient(90deg, color-mix(in srgb, var(--magenta) 65%, white), var(--dir));
@@ -154,7 +154,7 @@ body::before {
   box-shadow: 0 0 26px -10px var(--glow-m);
 }
 
-/* Fallbacks: ohne Blur bzw. bei reduzierter Transparenz deckend */
+/* Fallbacks: opaque background without backdrop-filter or when reduced transparency is requested */
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root {

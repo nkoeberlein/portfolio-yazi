@@ -10,7 +10,7 @@ flowchart TD
   %% a comment inside the diagram stays
 `;
 
-test("parseDiagramFile: Kopf wird gelesen und vom Quelltext getrennt", () => {
+test("parseDiagramFile: reads header and separates it from diagram source", () => {
   const diagram = parseDiagramFile("flowchart", FILE);
   assert.equal(diagram.title, "Flowchart");
   assert.equal(diagram.summary, "Decisions: and pipelines.");
@@ -19,7 +19,7 @@ test("parseDiagramFile: Kopf wird gelesen und vom Quelltext getrennt", () => {
   assert.match(diagram.code, /a comment inside the diagram stays/);
 });
 
-test("parseDiagramFile: fehlende Kopfzeile oder leerer Quelltext wirft", () => {
+test("parseDiagramFile: throws on missing header line or empty source", () => {
   assert.throws(() => parseDiagramFile("x", "flowchart TD\n a --> b"), /missing "%% title/);
   assert.throws(
     () => parseDiagramFile("x", "%% title: T\n%% summary: S\n%% updated: 2026-01-01\n"),
@@ -27,7 +27,7 @@ test("parseDiagramFile: fehlende Kopfzeile oder leerer Quelltext wirft", () => {
   );
 });
 
-test("readDiagrams: die Beispieldateien des Themes sind vollständig", () => {
+test("readDiagrams: sample diagram files in theme are complete", () => {
   const diagrams = readDiagrams("src/content/diagrams");
   assert.deepEqual(
     diagrams.map((diagram) => diagram.id),

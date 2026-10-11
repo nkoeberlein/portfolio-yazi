@@ -6,6 +6,7 @@ import PreviewPane from "../../components/PreviewPane.astro";
 import TUIShell from "../../layouts/TUIShell.astro";
 import { projectVMs } from "../../lib/listing";
 import { rootParent, statusOf } from "../../lib/panes";
+import { SITE } from "../../site.config";
 
 const projects = await getCollection("projects");
 const entries = await projectVMs(projects);
@@ -16,10 +17,9 @@ if (!first) throw new Error("Projects directory needs at least one entry");
 
 <TUIShell
   title="~/projects/"
-  description="Selected projects by Max Mustermann: distributed systems, platform tooling, open source."
+  description={`Selected projects by ${SITE.name}: distributed systems, platform tooling, open source.`}
   crumbs={[{ label: "~", href: "/" }, { label: "projects/" }]}
   kind="tree"
-  defaultSel={first.name}
   parent="/"
   status={statusOf(entries)}
 >

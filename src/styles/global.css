@@ -23,8 +23,8 @@
   font-display: swap;
 }
 
-/* Flavor "sweet" — Garuda Linux Dr460nized (Sweet-Palette). Flavor-System:
-   github.com/yazi-rs/flavors. --magenta nur als Fläche/Verlauf, nicht als Textfarbe. */
+/* Flavor "sweet" — Garuda Linux Dr460nized (Sweet palette). Flavor system:
+   github.com/yazi-rs/flavors. --magenta used for accents/gradients, not body text. */
 :root {
   --bg: #161925;
   --bg-dark: #0c0e15;
@@ -42,7 +42,7 @@
   --blue: #7cb7ff;
 }
 
-/* Flavor-Variablen als Tailwind-Tokens: bg-bg, text-dir, border-border, font-mono … */
+/* Flavor variables exposed as Tailwind tokens: bg-bg, text-dir, border-border, font-mono … */
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-dark: var(--bg-dark);
