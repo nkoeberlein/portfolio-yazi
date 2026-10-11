@@ -1,14 +1,14 @@
 ---
 /**
- * Linke Pane: das übergeordnete Verzeichnis, der aktuelle Ordner ist markiert.
- * Reine Links ohne Auswahl-Logik — keynav.ts fasst nur `#filelist` an.
+ * Left pane: the parent directory, highlighting the current folder.
+ * Plain links without selection logic — keynav.ts only touches `#filelist`.
  */
 import { iconFor } from "../lib/icons";
 import type { ParentEntry } from "../lib/panes";
 
 interface Props {
   entries: ParentEntry[];
-  /** Pfad des gezeigten Verzeichnisses, z. B. `/home` oder `~` */
+  /** Path of the displayed directory, e.g. `/home` or `~` */
   label: string;
 }
 
@@ -22,7 +22,7 @@ const { entries, label } = Astro.props;
       entries.map((entry) => (
         <li class:list={[entry.kind, entry.active && "sel"]}>
           <a class="entry" href={entry.href} aria-current={entry.active ? "true" : undefined}>
-            <span class="glyph" aria-hidden="true">{iconFor(entry.name)}</span>
+            <span class="glyph" aria-hidden="true"><Fragment set:html={iconFor(entry.name)} /></span>
             <span class="c-name">{entry.name}</span>
           </a>
         </li>

@@ -1,5 +1,5 @@
-/* Listen in den Panes: Dateiliste (Mitte), Parent-Liste (links) und die
-   Ordner-Preview (rechts). Spalten ch-genau: [icon 2ch] [name 1fr] [size]. */
+/* Lists inside panes: file listing (center), parent list (left), and directory
+   preview (right). Monospace column alignment: [icon 2ch] [name 1fr] [size]. */
 
 .entry-list,
 .pv-ls {
@@ -35,7 +35,7 @@
   text-align: right;
 }
 
-/* File-Seiten: schmale Mittelspalte, nur Namen */
+/* File pages: narrower middle column, displaying names only */
 .tui[data-kind="file"] .entry .c-size {
   display: none;
 }
@@ -43,6 +43,11 @@
 li.dir .glyph,
 li.dir .c-name {
   color: var(--dir);
+}
+
+li.dir {
+  /* Light tone of the two-tone folder icons, derived from the flavor palette. */
+  --icon-badge: color-mix(in srgb, var(--dir) 35%, var(--fg));
 }
 
 li.dir .c-name {
@@ -53,7 +58,41 @@ li.file .glyph {
   color: var(--dim);
 }
 
-/* Auswahl: ganze Zeile hinterlegt, im aktiven Pane mit Akzentkante */
+/* Inline SVG icons (see lib/icons.ts): 1em square on the text baseline;
+   file-type tinting mirrors Yazi flavor rules. */
+.glyph .ic {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+}
+
+.glyph .ic-img {
+  color: var(--accent);
+}
+
+.glyph .ic-doc {
+  color: var(--blue);
+}
+
+.glyph .ic-mmd {
+  color: var(--green);
+}
+
+/* Directories render both states; the selected row shows the open folder. */
+.glyph .ic-open {
+  display: none;
+}
+
+li.sel .glyph .ic-closed {
+  display: none;
+}
+
+li.sel .glyph .ic-open {
+  display: inline-block;
+}
+
+/* Selection: highlighted row, accent edge on active panel */
 
 li.sel .entry {
   background: var(--sel);

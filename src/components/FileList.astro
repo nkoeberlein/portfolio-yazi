@@ -1,9 +1,9 @@
 ---
 /**
- * Mittlere Pane: die Dateiliste. Jeder Eintrag ist ein echter Link (Progressive
- * Enhancement) und trägt wahlweise ein <template> mit Preview-Inhalt, das
- * keynav.ts beim Auswählen in die rechte Pane kloniert. Datum und Note stehen
- * als data-Attribute bereit — keynav.ts schreibt sie in die Statuszeile.
+ * Middle pane: the file listing. Each entry is a real link (progressive
+ * enhancement) and optionally carries a `<template>` with preview content that
+ * keynav.ts clones into the right pane upon selection. Date and note are
+ * provided as data attributes — keynav.ts renders them into the status bar.
  */
 import { iconFor } from "../lib/icons";
 
@@ -14,12 +14,14 @@ export interface EntryVM {
   note: string;
   size: string;
   date: string;
-  /** Serverseitig vorselektiert (aria-current + .sel) */
+  /** Server-side preselected (aria-current + .sel) */
   selected: boolean;
-  /** Titel für die Preview-Pane, wenn dieser Eintrag gewählt wird */
+  /** Title for the preview pane when this entry is selected */
   previewTitle: string;
-  /** HTML für die Preview-Pane (bereits escaped, via set:html gerendert).
-   * Leer bei der geöffneten Datei: dort stellt keynav.ts das Dokument wieder her. */
+  /**
+   * HTML for the preview pane (already escaped, rendered via set:html).
+   * Empty for an opened file: keynav.ts restores the document on return.
+   */
   previewHTML: string;
 }
 
@@ -44,7 +46,7 @@ const { entries, ariaLabel = "File list" } = Astro.props;
           data-note={entry.note}
         >
           <a class="entry" href={entry.href} aria-current={entry.selected ? "page" : undefined}>
-            <span class="glyph" aria-hidden="true">{iconFor(entry.name)}</span>
+            <span class="glyph" aria-hidden="true"><Fragment set:html={iconFor(entry.name)} /></span>
             <span class="c-name">{entry.name}</span>
             <span class="c-size" aria-hidden="true">{entry.size}</span>
           </a>
