@@ -1,7 +1,7 @@
 # portfolio-yazi
 
 [![Built with Astro 7](https://img.shields.io/badge/Astro-7-bc52ee?logo=astro&logoColor=white)](https://astro.build)
-[![Requires Node.js 26+](https://img.shields.io/badge/node-%3E%3D26-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Requires Node.js 24+](https://img.shields.io/badge/node-%3E%3D24-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
 A portfolio theme for [Astro](https://astro.build) that looks and behaves like the terminal file
@@ -47,7 +47,7 @@ default.
 
 ## Quick start
 
-Requires **Astro 7** and **Node.js 26 or newer** (`engines` + `engine-strict` enforce this on
+Requires **Astro 7** and **Node.js 24 or newer** (`engines` + `engine-strict` enforce this on
 `npm install`; the tests rely on Node's built-in TypeScript support). All dependencies are public
 npm packages — no private registries, no build-time secrets.
 

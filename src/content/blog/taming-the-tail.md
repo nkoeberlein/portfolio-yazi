@@ -46,8 +46,8 @@ sequenceDiagram
 
 **3. A p99 budget per query family (−2.6 s).**
 Three "cached" queries were cache-invalidating themselves via writes from the
-same request. The budget dashboard exposed the family as `p99: 9.4s, budget:
-50ms` — nobody had ever looked at it through that lens. Fix: read from
+same request. The budget dashboard exposed the family as `p99: 9.4s, budget: 50ms` —
+nobody had ever looked at it through that lens. Fix: read from
 replicas with a 200 ms acceptable staleness window.
 
 ## What looked promising but wasn't

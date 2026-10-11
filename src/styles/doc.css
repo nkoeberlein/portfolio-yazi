@@ -207,6 +207,13 @@
   text-align: left;
 }
 
+/* First column holds short labels (period, channel, skill name) — never wrap
+   mid-value (`2019 → 2022` breaking after the arrow looks broken). */
+.doc td:first-child,
+.doc th:first-child {
+  white-space: nowrap;
+}
+
 .doc th {
   color: var(--dir);
   font-weight: 700;
