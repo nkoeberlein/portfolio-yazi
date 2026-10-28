@@ -231,6 +231,25 @@ body {
   color: var(--fg);
 }
 
+/* Simple Analytics badge: kept dim so it blends into the keyhints row (shown only when
+   `SITE.simpleAnalytics` is enabled; see TUIShell.astro) */
+.sa-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1.25rem;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+.sa-badge:hover {
+  opacity: 1;
+}
+
+.sa-badge img {
+  height: 1.1rem;
+  width: auto;
+}
+
 /* Responsive: hide parent column below 64rem, single-pane below 48rem */
 
 @media (max-width: 64rem) {

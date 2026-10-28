@@ -45,6 +45,8 @@ const {
 // Directory labels already end with `/` — do not add an extra separator there.
 const SEP = '<span aria-hidden="true">/</span>';
 const pageTitle = `${title} · ${HANDLE}`;
+// Simple Analytics badge domain is derived from the canonical site URL (see site.config).
+const badgeDomain = new URL(SITE.url).host;
 // SITE.url feeds astro.config `site`; fall back to the request origin in dev.
 const base = Astro.site ?? Astro.url;
 const canonicalURL = new URL(Astro.url.pathname, base);
@@ -135,6 +137,24 @@ const crumb = path
             <a href="/legal/imprint/">imprint</a>
             <a href="/legal/privacy/">privacy</a>
           </nav>
+          {SITE.simpleAnalytics && (
+            <a
+              href={`https://www.simpleanalytics.com?utm_source=${badgeDomain}&utm_content=badge`}
+              referrerpolicy="origin"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sa-badge"
+              aria-label="Simple Analytics"
+            >
+              <img
+                src={`https://simpleanalyticsbadges.com/${badgeDomain}?mode=dark&counter=false`}
+                alt=""
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                crossorigin="anonymous"
+              />
+            </a>
+          )}
         </div>
       </footer>
     </div>
