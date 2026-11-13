@@ -13,8 +13,8 @@ default.
 
 ![Home screen: file list in the middle, an ASCII Astro logo with a fetch-style profile on the right](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/home.png)
 
-| Project page with cover image and diagram | Mermaid examples rendered at build time |
-| --- | --- |
+| Project page with cover image and diagram                                                                       | Mermaid examples rendered at build time                                                                             |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | ![Project page](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/project.png) | ![Diagrams folder](https://raw.githubusercontent.com/nkoeberlein/portfolio-yazi/main/docs/screenshots/diagrams.png) |
 
 ## Features
@@ -58,14 +58,14 @@ npm install
 npm run dev        # http://localhost:4321
 ```
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Dev server with hot reload |
-| `npm run build` | Static build into `dist/` |
-| `npm run preview` | Serve the built site locally |
-| `npm run check` | Type-check `.astro` and `.ts` files |
-| `npm test` | Unit tests for the pure modules in `src/lib/` |
-| `npm run lint` / `npm run format` | Biome: check / fix formatting and lint rules |
+| Command                           | What it does                                  |
+| --------------------------------- | --------------------------------------------- |
+| `npm run dev`                     | Dev server with hot reload                    |
+| `npm run build`                   | Static build into `dist/`                     |
+| `npm run preview`                 | Serve the built site locally                  |
+| `npm run check`                   | Type-check `.astro` and `.ts` files           |
+| `npm test`                        | Unit tests for the pure modules in `src/lib/` |
+| `npm run lint` / `npm run format` | Biome: check / fix formatting and lint rules  |
 
 ## Make it yours
 
@@ -80,13 +80,13 @@ order:
    in which order.
 3. **`src/content/`** — your actual content:
 
-   | Folder | One file per | Required frontmatter |
-   | --- | --- | --- |
-   | `projects/` | project | `title`, `summary`, `period`, `role`, `updated` |
-   | `blog/` | post | `title`, `summary`, `published` |
-   | `pictures/` | image | `title`, `alt`, `caption`, `taken`, `image` |
+   | Folder      | One file per   | Required frontmatter                                |
+   | ----------- | -------------- | --------------------------------------------------- |
+   | `projects/` | project        | `title`, `summary`, `period`, `role`, `updated`     |
+   | `blog/`     | post           | `title`, `summary`, `published`                     |
+   | `pictures/` | image          | `title`, `alt`, `caption`, `taken`, `image`         |
    | `diagrams/` | `.mmd` diagram | `%% title`, `%% summary`, `%% updated` header lines |
-   | `legal/` | page | `title`, `summary`, `updated` |
+   | `legal/`    | page           | `title`, `summary`, `updated`                       |
 
    Projects and posts accept an optional `cover` image and `coverAlt`.
 4. **`src/pages/*.astro`** — the single-file pages (`about`, `now`, `cv`, `skills`, `contact`,
@@ -117,15 +117,15 @@ gitGraph) fail the build with a clear message. `src/content/diagrams/` has one e
 
 ## Keyboard
 
-| Key | Action |
-| --- | --- |
-| `↑` `↓` or `k` `j` | Move the selection |
-| `→`, `Enter` or `l` | Open the selected entry |
-| `←` or `h` | Go to the parent directory |
-| `Home` `End` or `g` `G` | First / last entry |
-| `J` `K` | Scroll the preview pane |
-| `q` | Back to `~` |
-| `?` | Show all shortcuts |
+| Key                     | Action                     |
+| ----------------------- | -------------------------- |
+| `↑` `↓` or `k` `j`      | Move the selection         |
+| `→`, `Enter` or `l`     | Open the selected entry    |
+| `←` or `h`              | Go to the parent directory |
+| `Home` `End` or `g` `G` | First / last entry         |
+| `J` `K`                 | Scroll the preview pane    |
+| `q`                     | Back to `~`                |
+| `?`                     | Show all shortcuts         |
 
 ## Project structure
 

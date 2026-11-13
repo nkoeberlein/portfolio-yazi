@@ -1,4 +1,5 @@
 ---
+
 title: Ship the boring stuff — platform teams that pay rent
 summary: Platform work is only valued when it deletes work from other teams. What I look for before building anything "helpful".
 published: 2026-08-20
@@ -11,7 +12,7 @@ before a single line of platform code gets written.
 
 ## 1. What work does this delete?
 
-Not "reduce" — *delete*. If the answer is "engineers will fill in a nicer
+Not "reduce" — _delete_. If the answer is "engineers will fill in a nicer
 form instead of the old form", we are moving friction, not removing it. A
 platform feature earns its place when a person, a ticket, or a standing
 meeting disappears. I keep a literal deletion list per quarter; features that

@@ -1,4 +1,5 @@
 ---
+
 cover: ../../assets/covers/mono-tui.svg
 coverAlt: "Mock-up of a three-pane terminal UI"
 title: mono-tui
@@ -14,7 +15,7 @@ featured: false
 ## What
 
 A small (2.5k SLOC) library on top of `ratatui` encoding the layout rules
-that make terminal UIs feel *precise*: column alignment in `ch` units,
+that make terminal UIs feel _precise_: column alignment in `ch` units,
 baseline grids for lists, and a `Table` that never scrolls a row under the
 header by accident.
 

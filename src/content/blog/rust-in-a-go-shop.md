@@ -1,4 +1,5 @@
 ---
+
 title: Rust in a Go shop — a field report
 summary: Two years of shipping Rust services next to a Go fleet. Where it paid off, where it didn't, and the hiring math nobody expects.
 published: 2025-11-02
@@ -29,7 +30,7 @@ just not where the blog posts said it would be.
 
 ## The hiring math nobody expects
 
-We feared a Rust hiring gap. Reality: 3 strong hires came *because* of Rust
+We feared a Rust hiring gap. Reality: 3 strong hires came _because_ of Rust
 (people self-select toward systems work), and Go engineers picked it up in
 about 6 weeks for service-shaped code. The real cost was not hiring — it was
 **review bandwidth**: Rust PRs from juniors need a patient senior, and you

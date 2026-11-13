@@ -1,4 +1,5 @@
 ---
+
 title: deploybar
 summary: Internal release automation — one command from green CI to staged rollout across 40 services.
 period: 2019 — 2021

@@ -61,7 +61,7 @@
   (derzeit generierte SVG-Platzhalter). Neu: `now.md`, `~/legal/` mit `imprint.md` und
   `privacy.md` (englische Vorlagen mit `TODO`-Markern, `noindex`, Links in jeder Fußzeile).
   **Vor Go-live:** Legal-Texte mit echten Angaben füllen und prüfen lassen.
-- 2026-10-11: Mermaid-Diagramme: ```` ```mermaid ````-Blöcke werden beim Build mit
+- 2026-10-11: Mermaid-Diagramme: ` ```mermaid `-Blöcke werden beim Build mit
   `beautiful-mermaid` zu Inline-SVG in Flavor-Farben (kein JS im Browser). Unterstützt sind
   Flowchart, Sequenz-, Klassen-, ER-, Zustands- und XY-Diagramme.
 - 2026-10-11: **Ziel: Veröffentlichung als Theme auf Astro Themes.** Dazu `src/site.config.ts`

@@ -1,4 +1,5 @@
 ---
+
 title: Imprint
 summary: Provider identification according to § 5 DDG (German Digital Services Act).
 updated: 2026-10-11

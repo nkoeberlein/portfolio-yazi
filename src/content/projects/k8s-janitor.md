@@ -1,4 +1,5 @@
 ---
+
 title: k8s-janitor
 summary: Kubernetes operator that keeps namespaces clean — TTLs on everything, evidence on every kill.
 period: 2023 — now

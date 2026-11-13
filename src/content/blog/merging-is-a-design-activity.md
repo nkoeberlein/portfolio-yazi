@@ -1,4 +1,5 @@
 ---
+
 title: Merging is a design activity
 summary: Code review gets all the attention, but the merge strategy is where architectures are actually decided. Notes from 200+ merges.
 published: 2025-06-15
@@ -20,10 +21,10 @@ are expensive to revisit.
 
 **1. Merge criteria, not review criteria.**
 We stopped discussing style in review and wrote 6 merge criteria instead:
-*no new shared mutable state · no downward dependency (child imports
+_no new shared mutable state · no downward dependency (child imports
 parent) · errors are values at boundaries · interfaces are closed unless
 two callers exist · tests describe behavior, not implementation · a stranger
-can ship from this branch.* Review became 60% faster because taste stopped
+can ship from this branch._ Review became 60% faster because taste stopped
 masquerading as gatekeeping.
 
 **2. Small is a merge property, not a review property.**

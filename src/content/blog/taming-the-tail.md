@@ -1,4 +1,5 @@
 ---
+
 cover: ../../assets/covers/taming-the-tail.svg
 coverAlt: "Latency histogram with a long tail and a p99 marker"
 title: "Taming the tail — 12 s to 400 ms p99 on a checkout flow"

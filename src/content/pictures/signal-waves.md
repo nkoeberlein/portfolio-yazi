@@ -1,4 +1,5 @@
 ---
+
 title: Signal waves
 alt: "Fourteen layered sine waves in magenta, violet, cyan and green"
 caption: "What a healthy latency distribution feels like — calm, layered, bounded."

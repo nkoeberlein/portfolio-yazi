@@ -1,4 +1,5 @@
 ---
+
 title: Privacy
 summary: What this site processes about you — which is close to nothing.
 updated: 2026-10-11

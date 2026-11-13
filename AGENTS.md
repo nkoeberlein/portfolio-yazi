@@ -101,7 +101,7 @@ goes to `~`, `Home/End` or `g/G` jump to start/end, `J/K` scroll the preview, `?
   from `public/`. The current SVGs are placeholders.
 - **Legal:** `legal/*` are templates with `TODO` markers and `noindex`; the footer links in
   `TUIShell.astro` must stay on every page.
-- **Diagrams:** ```` ```mermaid ```` blocks are turned into inline SVG at build time
+- **Diagrams:** ` ```mermaid ` blocks are turned into inline SVG at build time
   (`src/lib/mermaid.ts`, Sätteri plugin in `astro.config.mjs`) — no mermaid.js in the browser.
   Only flowchart, sequence, class, ER, state, and XY charts; anything else fails the build.
   After plugin changes run `npx astro build --force` (the content cache does not notice them).

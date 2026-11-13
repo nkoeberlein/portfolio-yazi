@@ -1,4 +1,5 @@
 ---
+
 title: Neon grid
 alt: "Synthwave horizon: a striped sun setting behind a magenta and cyan perspective grid"
 caption: "Obligatory synthwave horizon. Every dark theme needs one."
